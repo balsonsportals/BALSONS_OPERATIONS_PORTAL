@@ -5,6 +5,8 @@
 **Architecture Standard:** `SAM-2026` / `BEDS V1.0 Locked Baseline`  
 **Governance Policy:** `Global Super Administrator Policy (Version 1.0)`  
 **Dedicated Google Sheet Database ID:** [`1GeqDDmBgdVm3ZUp4c9iB36__iLJ9wADQQRhEIwVxa-E`](https://docs.google.com/spreadsheets/d/1GeqDDmBgdVm3ZUp4c9iB36__iLJ9wADQQRhEIwVxa-E/edit)  
+**Dedicated Google Apps Script Project ID:** [`1an3LeD6Ich14qtWZ5GFgJMaa3dYQSboZRwFy9g_gf9zWicPDB9KpFNny`](https://script.google.com/d/1an3LeD6Ich14qtWZ5GFgJMaa3dYQSboZRwFy9g_gf9zWicPDB9KpFNny/edit)  
+**Clasp Management:** Configured with `.clasp.json` (rootDir: `apps-script`, push verified via `clasp push --force`)  
 **Live Portal Deployment:** [BALSONS Operations Manager](https://balsonsportals.github.io/BALSONS%20OPERATIONS%20MANAGER/index.html)  
 
 ---
