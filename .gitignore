@@ -1,3 +1,6 @@
 # BALSONS Operations Portal Git Ignore
 *.log
 *.tmp
+
+*.backup*.html
+*.backup*.js
