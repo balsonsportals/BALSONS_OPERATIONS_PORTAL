@@ -2,9 +2,15 @@
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>BALSONS Operations Manager • Heavy Erection & Lift Execution (V7.2)</title>
-  <link rel="icon" type="image/png" href="assets/images/balsons-logo.png" />
+  <link rel="icon" type="image/png" href="assets/images/balsons-logo.png">
+
+  <!-- Inter & JetBrains Mono Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="beds.css">
   <style>
     /* STRICT SUPPRESSION OF DEVELOPER SIMULATOR BARS */
@@ -16,8 +22,11 @@
       display: none !important;
       visibility: hidden !important;
       height: 0 !important;
+      min-height: 0 !important;
       overflow: hidden !important;
       pointer-events: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
     }
 
     :root {
@@ -32,6 +41,8 @@
       --super-bg: #f8fafc;
       --super-card: #ffffff;
       --super-shadow: 0 4px 20px rgba(16, 42, 53, 0.06);
+      --beds-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --beds-font-mono: 'JetBrains Mono', monospace;
     }
 
     [data-theme="dark"] {
@@ -52,14 +63,14 @@
       background-color: var(--super-bg);
       color: var(--beds-text-primary, #1e293b);
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-family: var(--beds-font-sans);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       overflow-x: hidden;
     }
 
-    /* ANIMATIONS */
+    /* KEYFRAME ANIMATIONS */
     @keyframes superFadeIn {
       from { opacity: 0; transform: translateY(-8px); }
       to { opacity: 1; transform: translateY(0); }
@@ -72,17 +83,12 @@
       0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
       50% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
     }
-    @keyframes ambientShimmer {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
 
     /* 1. MASTER EXECUTIVE HEADER */
     header.exec-header {
       background: var(--beds-bg-panel, #ffffff);
       border-bottom: 1px solid var(--super-border);
-      padding: 12px 32px;
+      padding: 10px 28px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -90,7 +96,7 @@
       top: 0;
       z-index: 100;
       box-shadow: var(--super-shadow);
-      animation: superFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+      animation: superFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
     .header-brand {
       display: flex;
@@ -102,13 +108,18 @@
       width: auto;
       object-fit: contain;
       filter: drop-shadow(0 2px 4px rgba(0,0,0,0.08));
+      transition: transform 0.25s ease;
+    }
+    .header-brand:hover img {
+      transform: scale(1.04);
     }
     .brand-text h1 {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 800;
       color: var(--beds-charcoal-heading, #102a35);
       margin: 0;
       line-height: 1.2;
+      letter-spacing: -0.2px;
     }
     .brand-text p {
       font-size: 11px;
@@ -121,8 +132,9 @@
     .brand-slogan {
       font-size: 10.5px;
       font-style: italic;
-      color: var(--beds-text-muted, #64748b);
+      color: rgb(223, 35, 14);
       margin-top: 2px;
+      font-weight: 600;
     }
     .header-actions {
       display: flex;
@@ -141,6 +153,11 @@
       font-size: 12px;
       font-weight: 600;
       color: var(--beds-text-secondary, #475569);
+      transition: all 0.2s ease;
+    }
+    .badge-pill:hover {
+      border-color: var(--super-cyan);
+      transform: translateY(-1px);
     }
     .online-indicator {
       display: inline-block;
@@ -159,298 +176,367 @@
       font-weight: 700;
       color: var(--super-cyan);
       cursor: pointer;
-      text-decoration: none;
       display: inline-flex;
       align-items: center;
       gap: 6px;
       transition: all 0.2s ease;
+      text-decoration: none;
     }
     .btn-action-pill:hover {
       background: var(--super-cyan);
       color: #ffffff;
       transform: translateY(-1px);
+      box-shadow: 0 4px 12px var(--super-cyan-glow);
+    }
+    .user-session-chip {
+      background: rgba(16, 42, 53, 0.04);
+      border: 1px solid var(--super-border);
+      padding: 5px 12px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
     }
 
-    /* 2. EXECUTIVE SUPER VIEW RIBBON (STUNNING ANIMATED) */
+    /* 2. EXECUTIVE OPERATIONS SUPER VIEW RIBBON */
     .super-view-ribbon {
-      background: linear-gradient(135deg, #0d1e27 0%, #102a35 45%, #163847 100%);
-      background-size: 200% 200%;
-      animation: ribbonEntrance 0.5s cubic-bezier(0.16, 1, 0.3, 1) both, ambientShimmer 20s ease infinite;
+      background: linear-gradient(135deg, var(--super-navy) 0%, var(--super-teal) 60%, var(--super-teal-light) 100%);
       color: #ffffff;
-      padding: 24px 32px;
-      border-bottom: 1px solid rgba(0, 151, 167, 0.3);
-      position: relative;
-      overflow: hidden;
-    }
-    .super-view-ribbon::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(0, 151, 167, 0.12) 0%, transparent 60%);
-      pointer-events: none;
-    }
-    .super-view-container {
-      max-width: 1400px;
-      margin: 0 auto;
-      position: relative;
-      z-index: 2;
+      padding: 22px 28px;
+      border-bottom: 1px solid var(--super-border);
+      animation: ribbonEntrance 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
     .super-view-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
       flex-wrap: wrap;
-      gap: 12px;
+      gap: 16px;
+      margin-bottom: 20px;
     }
     .super-view-title h2 {
-      font-size: 22px;
+      font-size: 20px;
       font-weight: 800;
-      margin: 0 0 4px 0;
+      margin: 0;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
       letter-spacing: -0.3px;
     }
     .super-view-title p {
-      font-size: 13px;
+      font-size: 12.5px;
       color: #94a3b8;
-      margin: 0;
+      margin: 4px 0 0 0;
     }
-    .super-stat-grid {
+    .super-view-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .btn-super-act {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    .btn-super-act:hover {
+      background: #0097a7;
+      border-color: #0097a7;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(0, 151, 167, 0.4);
+    }
+    .super-stats-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 16px;
     }
     .super-stat-card {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 10px;
-      padding: 16px 20px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
+      padding: 16px 18px;
       backdrop-filter: blur(8px);
       transition: all 0.25s ease;
     }
     .super-stat-card:hover {
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.09);
       border-color: var(--super-cyan);
-      transform: translateY(-2px);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
     }
-    .super-stat-icon {
-      font-size: 28px;
-      background: rgba(0, 151, 167, 0.15);
-      border: 1px solid rgba(0, 151, 167, 0.3);
-      width: 50px;
-      height: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 10px;
-    }
-    .super-stat-content h3 {
-      font-size: 22px;
-      font-weight: 800;
-      margin: 0;
-      color: #ffffff;
-    }
-    .super-stat-content p {
+    .stat-label {
       font-size: 11.5px;
-      color: #94a3b8;
-      margin: 2px 0 0 0;
+      font-weight: 700;
+      color: #cbd5e1;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      font-weight: 600;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .stat-value {
+      font-size: 26px;
+      font-weight: 900;
+      color: #ffffff;
+      font-family: var(--beds-font-mono);
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+    .stat-sub {
+      font-size: 11.5px;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    /* 3. MAIN NAVIGATION TABS */
-    .tabs-nav-bar {
-      background: var(--super-card);
-      border-bottom: 1px solid var(--super-border);
+    /* 3. NAVIGATION TABS BAR (LOCKED BEDS STANDARD: BLACK IN LIGHT, WHITE IN DARK) */
+    nav.tabs-nav-bar {
+      background: var(--beds-bg-panel, #ffffff);
+      border-bottom: 2px solid var(--super-cyan);
+      padding: 8px 28px;
       position: sticky;
-      top: 63px;
+      top: 58px;
       z-index: 90;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.03);
     }
     .tabs-container {
-      max-width: 1400px;
-      margin: 0 auto;
       display: flex;
-      gap: 4px;
-      padding: 0 32px;
+      gap: 8px;
+      align-items: center;
       overflow-x: auto;
       scrollbar-width: none;
+      white-space: nowrap;
     }
     .tabs-container::-webkit-scrollbar {
       display: none;
     }
     .nav-tab-btn {
       background: transparent;
-      border: none;
-      border-bottom: 3px solid transparent;
-      padding: 14px 18px;
-      font-size: 13px;
+      border: 1px solid transparent;
+      color: #000000 !important; /* STRICTLY BLACK IN LIGHT MODE (USER LOCKED) */
+      padding: 8px 14px;
+      font-size: 12.5px;
       font-weight: 700;
-      color: var(--beds-text-secondary, #475569);
       cursor: pointer;
-      display: flex;
+      border-radius: 6px;
+      display: inline-flex;
       align-items: center;
-      gap: 8px;
-      white-space: nowrap;
+      gap: 7px;
       transition: all 0.2s ease;
     }
-    .nav-tab-btn:hover {
-      color: var(--super-cyan);
-      background: rgba(0, 151, 167, 0.04);
+    .nav-tab-btn:hover:not(.active) {
+      background: rgba(0, 151, 167, 0.08);
+      color: #000000 !important;
+      border-color: rgba(0, 151, 167, 0.2);
     }
     .nav-tab-btn.active {
-      color: var(--super-cyan);
-      border-bottom-color: var(--super-cyan);
-      background: rgba(0, 151, 167, 0.06);
+      background: var(--super-cyan, #0097a7) !important;
+      color: #ffffff !important;
+      font-weight: 800;
+      box-shadow: 0 2px 8px rgba(0, 151, 167, 0.35);
     }
 
-    /* 4. CONTENT WRAPPER */
-    .portal-main {
-      max-width: 1400px;
+    /* Tab colors in Dark Mode */
+    [data-theme="dark"] nav.tabs-nav-bar {
+      background: var(--beds-bg-panel);
+    }
+    [data-theme="dark"] .nav-tab-btn {
+      color: #ffffff !important; /* STRICTLY WHITE IN DARK MODE (USER LOCKED) */
+    }
+    [data-theme="dark"] .nav-tab-btn:hover:not(.active) {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff !important;
+    }
+    [data-theme="dark"] .nav-tab-btn.active {
+      background: var(--super-cyan) !important;
+      color: #ffffff !important;
+    }
+
+    /* 4. MAIN PORTAL CONTENT & CARDS */
+    main.portal-main {
+      padding: 24px 28px;
+      flex: 1;
+      max-width: 1680px;
       margin: 0 auto;
-      padding: 28px 32px;
       width: 100%;
       box-sizing: border-box;
-      flex: 1;
     }
     .tab-pane {
       display: none;
-      animation: superFadeIn 0.3s ease;
+      animation: superFadeIn 0.3s ease-out both;
     }
     .tab-pane.active {
       display: block;
     }
 
-    /* CARDS & PANELS */
     .card-panel {
-      background: var(--super-card);
+      background: var(--beds-bg-panel, #ffffff);
       border: 1px solid var(--super-border);
       border-radius: 12px;
-      padding: 24px;
+      padding: 22px;
       margin-bottom: 24px;
       box-shadow: var(--super-shadow);
+      transition: border-color 0.2s ease;
     }
     .card-panel-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 18px;
-      border-bottom: 1px solid var(--super-border);
-      padding-bottom: 14px;
+      margin-bottom: 16px;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 12px;
+      border-bottom: 1px solid var(--super-border);
+      padding-bottom: 12px;
     }
     .card-panel-header h3 {
-      font-size: 17px;
+      font-size: 16px;
       font-weight: 800;
       color: var(--beds-charcoal-heading, #102a35);
       margin: 0;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
+
+    /* Toolbar Filter Row */
+    .filter-toolbar-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+      background: var(--super-bg);
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--super-border);
+    }
+    .filter-search-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--beds-bg-panel);
+      border: 1px solid var(--super-border);
+      border-radius: 6px;
+      padding: 6px 12px;
+      flex: 1;
+      min-width: 240px;
+      max-width: 380px;
+    }
+    .filter-search-box input {
+      border: none;
+      background: transparent;
+      outline: none;
+      width: 100%;
+      font-size: 12.5px;
+      color: var(--beds-text-primary);
+    }
+
+    /* Grids */
     .grid-3 {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 18px;
     }
     .grid-2 {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 18px;
     }
-
     .workspace-card {
-      background: var(--super-card);
+      background: var(--beds-bg-panel);
       border: 1px solid var(--super-border);
       border-radius: 10px;
       padding: 20px;
-      transition: all 0.25s ease;
       display: flex;
       flex-direction: column;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+      transition: all 0.25s ease;
     }
     .workspace-card:hover {
       transform: translateY(-3px);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+      box-shadow: 0 10px 24px rgba(16, 42, 53, 0.08);
       border-color: var(--super-cyan);
     }
     .ws-badge {
-      display: inline-block;
-      padding: 3px 10px;
-      border-radius: 9999px;
-      font-size: 10.5px;
+      font-size: 11px;
       font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 12px;
-    }
-    .ws-badge-axle {
-      background: #eff6ff;
-      color: #1d4ed8;
-      border: 1px solid #bfdbfe;
-    }
-    .ws-badge-wheel {
-      background: #ecfdf5;
-      color: #047857;
-      border: 1px solid #a7f3d0;
-    }
-    .ws-badge-ms {
-      background: #fffbeb;
-      color: #b45309;
-      border: 1px solid #fde68a;
-    }
-
-    .table-responsive {
-      overflow-x: auto;
-    }
-    .beds-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-    }
-    .beds-table th, .beds-table td {
-      padding: 12px 16px;
-      text-align: left;
-      border-bottom: 1px solid var(--super-border);
-    }
-    .beds-table th {
-      background: var(--super-bg);
-      font-weight: 700;
-      color: var(--beds-charcoal-heading, #102a35);
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .beds-table tr:hover td {
-      background: rgba(0, 151, 167, 0.02);
-    }
-
-    .tag-chip {
-      display: inline-block;
       padding: 3px 8px;
       border-radius: 4px;
-      font-size: 11px;
-      font-weight: 700;
+      display: inline-block;
+      margin-bottom: 12px;
+      width: fit-content;
     }
-    .tag-cyan { background: #e0f2fe; color: #0369a1; }
-    .tag-green { background: #dcfce7; color: #15803d; }
-    .tag-amber { background: #fef3c7; color: #b45309; }
-    .tag-red { background: #fee2e2; color: #b91c1c; }
-    .tag-purple { background: #f3e8ff; color: #7e22ce; }
+    .ws-badge-axle { background: rgba(59, 130, 246, 0.12); color: #2563eb; }
+    .ws-badge-wheel { background: rgba(16, 185, 129, 0.12); color: #059669; }
+    .ws-badge-ms { background: rgba(245, 158, 11, 0.12); color: #d97706; }
 
-    /* MODAL STYLES */
+    /* Tables */
+    .table-responsive {
+      overflow-x: auto;
+      border-radius: 8px;
+      border: 1px solid var(--super-border);
+    }
+    table.beds-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+      background: var(--beds-bg-panel);
+    }
+    table.beds-table th {
+      background: var(--super-bg);
+      color: var(--beds-charcoal-heading);
+      padding: 10px 14px;
+      font-weight: 700;
+      text-align: left;
+      border-bottom: 1px solid var(--super-border);
+      white-space: nowrap;
+    }
+    table.beds-table td {
+      padding: 11px 14px;
+      border-bottom: 1px solid var(--super-border);
+      color: var(--beds-text-primary);
+      vertical-align: middle;
+    }
+    table.beds-table tr:hover td {
+      background: rgba(0, 151, 167, 0.03);
+    }
+
+    /* Tag Chips */
+    .tag-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 11.5px;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+    .tag-cyan { background: rgba(0, 151, 167, 0.1); color: #0097a7; }
+    .tag-green { background: rgba(16, 185, 129, 0.1); color: #059669; }
+    .tag-amber { background: rgba(245, 158, 11, 0.1); color: #d97706; }
+    .tag-red { background: rgba(220, 38, 38, 0.1); color: #dc2626; }
+    .tag-purple { background: rgba(124, 58, 237, 0.1); color: #7c3aed; }
+
+    /* Modals */
     .ops-modal-overlay {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      inset: 0;
       background: rgba(13, 30, 39, 0.65);
       backdrop-filter: blur(4px);
       z-index: 1000;
@@ -460,28 +546,31 @@
       padding: 20px;
     }
     .ops-modal-card {
-      background: var(--super-card);
+      background: var(--beds-bg-panel, #ffffff);
       border: 1px solid var(--super-border);
       border-radius: 12px;
-      max-width: 650px;
+      max-width: 680px;
       width: 100%;
       max-height: 90vh;
       overflow-y: auto;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
-      animation: superFadeIn 0.25s ease;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      animation: superFadeIn 0.2s ease-out both;
     }
     .ops-modal-header {
-      padding: 18px 24px;
+      padding: 16px 22px;
       border-bottom: 1px solid var(--super-border);
       display: flex;
       justify-content: space-between;
       align-items: center;
+      background: var(--super-bg);
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
     }
     .ops-modal-header h4 {
       margin: 0;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 800;
-      color: var(--beds-charcoal-heading, #102a35);
+      color: var(--beds-charcoal-heading);
     }
     .ops-modal-close {
       background: transparent;
@@ -490,43 +579,84 @@
       cursor: pointer;
       color: #94a3b8;
     }
+    .ops-modal-close:hover { color: #dc2626; }
     .ops-modal-body {
-      padding: 24px;
+      padding: 22px;
     }
+
+    /* Forms */
     .form-group {
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
     .form-group label {
       display: block;
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 700;
-      margin-bottom: 6px;
       color: var(--beds-text-secondary);
+      margin-bottom: 5px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.3px;
     }
     .form-control {
       width: 100%;
-      padding: 9px 12px;
+      padding: 8px 12px;
+      font-size: 13px;
       border: 1px solid var(--super-border);
       border-radius: 6px;
-      font-size: 13px;
-      background: var(--super-bg);
+      background: var(--beds-bg-panel);
       color: var(--beds-text-primary);
       box-sizing: border-box;
+      font-family: inherit;
     }
     .form-control:focus {
       outline: none;
       border-color: var(--super-cyan);
+      box-shadow: 0 0 0 2px var(--super-cyan-glow);
     }
 
+    /* Floating Toast Notification */
+    .ops-toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .ops-toast {
+      background: #102a35;
+      color: #ffffff;
+      border: 1px solid #0097a7;
+      padding: 12px 18px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 600;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 280px;
+      max-width: 420px;
+      animation: superFadeIn 0.25s ease-out;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .ops-toast.fade-out {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    .ops-toast-success { border-color: #10b981; }
+    .ops-toast-warning { border-color: #f59e0b; }
+    .ops-toast-info { border-color: #0097a7; }
+
+    /* Footer */
     footer.portal-footer {
-      background: var(--super-card);
+      background: var(--beds-bg-panel);
       border-top: 1px solid var(--super-border);
-      padding: 24px 32px;
-      font-size: 12px;
-      color: var(--beds-text-secondary, #475569);
+      padding: 20px 28px;
       text-align: center;
+      font-size: 12px;
+      color: var(--beds-text-muted);
       margin-top: auto;
     }
   </style>
@@ -536,20 +666,20 @@
   <!-- 1. MASTER EXECUTIVE HEADER -->
   <header class="exec-header">
     <div class="header-brand">
-      <a href="../index.html" title="Return to Enterprise Launcher" style="display: flex; align-items: center; text-decoration: none;">
-        <img src="assets/images/balsons-logo.png" onerror="this.onerror=null; this.src='https://lh3.googleusercontent.com/d/1HB7sGaQ4f2qq0NNzgBQrSpUe2DJWV4uh'" alt="BALSONS Logo">
-      </a>
+      <img src="assets/images/balsons-logo.png" alt="BALSONS Logo">
       <div class="brand-text">
         <h1>BALSONS HEAVY LIFT & SHIFT</h1>
-        <p>Operations Manager • Heavy Erection & Lift Execution</p>
+        <p>Operations & Heavy Rigging Execution Manager</p>
         <div class="brand-slogan">“Difficult We Do Easily, Impossible Takes Little Time...!”</div>
       </div>
     </div>
     <div class="header-actions">
-      <div class="badge-pill">
-        <span class="online-indicator"></span>
-        <span>JTRWF • Khordha, Odisha</span>
-      </div>
+      <span class="badge-pill">
+        📍 JTRWF PROJECT • Khordha, Odisha
+      </span>
+      <span class="badge-pill">
+        <span class="online-indicator"></span> SYNC Online
+      </span>
       <a href="https://docs.google.com/spreadsheets/d/1GeqDDmBgdVm3ZUp4c9iB36__iLJ9wADQQRhEIwVxa-E/edit" target="_blank" class="badge-pill" style="background: rgba(16, 185, 129, 0.1); border-color: #10b981; color: #047857; text-decoration: none; font-weight: 700;" title="Open Dedicated Operations Google Sheets Database: 1GeqDDmBgdVm3ZUp4c9iB36__iLJ9wADQQRhEIwVxa-E">
         <span class="online-indicator"></span>
         <span>DB Sync: 1GeqDDmB... ↗</span>
@@ -558,114 +688,94 @@
         <span class="online-indicator" style="background: #0097a7;"></span>
         <span>Apps Script: 1an3LeD6... ↗</span>
       </a>
-      <div class="badge-pill" style="font-weight: 700; color: var(--super-cyan);">
-        BAL-OPS-E2E-007 • V7.2
+      <button class="badge-pill" id="themeBtn" onclick="toggleTheme()" style="cursor: pointer;" title="Toggle Light/Dark Theme">
+        🌙 Dark
+      </button>
+      <div id="headerUserBadge" class="user-session-chip" onclick="BalsonsOpsApp.openLoginModal()" title="Click to Switch Role">
+        👤 <strong>Dilip Rout</strong> · Operations Area Manager
       </div>
-      <button class="btn-action-pill" onclick="BalsonsOpsApp.exportOperationalData()" title="Export JSON Database Snapshot">
-        📥 Backup Data
-      </button>
-      <button class="badge-pill" onclick="toggleTheme()" style="cursor: pointer;">
-        🌙 Theme
-      </button>
-      <a href="../index.html" class="btn-action-pill" style="border-color: #64748b; color: #475569;">
-        🚀 Enterprise Launcher
+      <a href="../index.html" class="btn-action-pill" style="border-color: #64748b; color: #475569;" title="Return to Central Launcher">
+        🚀 Launcher
       </a>
     </div>
   </header>
 
-  <!-- 2. EXECUTIVE OPERATIONS SUPER VIEW RIBBON (STUNNING ANIMATED) -->
+  <!-- 2. EXECUTIVE OPERATIONS SUPER VIEW RIBBON -->
   <section class="super-view-ribbon">
-    <div class="super-view-container">
-      <div class="super-view-header">
-        <div class="super-view-title">
-          <h2>📊 Executive Operations Super View</h2>
-          <p>Jupiter Tatravagonka Railwheel Factory (JTRWF) • Heavy Erection & Lift Execution Status</p>
-        </div>
-        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-          <span class="tag-chip tag-cyan" style="font-size: 12px; padding: 6px 12px;">Anchor: PRJ-JTRWF-SCHULER</span>
-          <span class="tag-chip tag-purple" style="font-size: 12px; padding: 6px 12px;">Storage: IndexedDB (Local-First)</span>
-          <a href="https://docs.google.com/spreadsheets/d/1GeqDDmBgdVm3ZUp4c9iB36__iLJ9wADQQRhEIwVxa-E/edit" target="_blank" class="tag-chip tag-green" style="text-decoration:none; font-size:12px; padding:6px 12px;" title="Official Operations Master Database: 1GeqDDmBgdVm3ZUp4c9iB36__iLJ9wADQQRhEIwVxa-E">
-            📊 Operations DB: 1GeqDDmB... (Google Sheets) ↗
-          </a>
-          <a href="https://script.google.com/d/1an3LeD6Ich14qtWZ5GFgJMaa3dYQSboZRwFy9g_gf9zWicPDB9KpFNny/edit" target="_blank" class="tag-chip tag-cyan" style="text-decoration:none; font-size:12px; padding:6px 12px;" title="Google Apps Script Clasp Gateway: 1an3LeD6Ich14qtWZ5GFgJMaa3dYQSboZRwFy9g_gf9zWicPDB9KpFNny">
-            ⚡ Apps Script: 1an3LeD6... ↗
-          </a>
-        </div>
+    <div class="super-view-header">
+      <div class="super-view-title">
+        <h2><span>⚡</span> Executive Operations Super View</h2>
+        <p>Jupiter Tatravagonka Railwheel Factory (JTRWF) • Schuler Forging & Axle Machining Heavy Erection</p>
       </div>
+      <div class="super-view-actions">
+        <button class="btn-super-act" onclick="BalsonsOpsApp.openCreateWpModal()">
+          ➕ Create WP
+        </button>
+        <button class="btn-super-act" onclick="BalsonsOpsApp.openNewShiftModal()">
+          📝 Shift Handover
+        </button>
+        <button class="btn-super-act" onclick="BalsonsOpsApp.openRaiseHoldModal()">
+          ⚠️ Raise Hold
+        </button>
+        <button class="btn-super-act" onclick="BalsonsOpsApp.openSyncModal()">
+          🔄 Dual Sync
+        </button>
+        <button class="btn-super-act" onclick="BalsonsOpsApp.exportOperationalData()">
+          💾 Backup JSON
+        </button>
+      </div>
+    </div>
 
-      <div class="super-stat-grid">
-        <div class="super-stat-card">
-          <div class="super-stat-icon">🏗️</div>
-          <div class="super-stat-content">
-            <h3 id="statErectionProgress">68.4%</h3>
-            <p>Erection Progress</p>
-          </div>
-        </div>
-        <div class="super-stat-card">
-          <div class="super-stat-icon">📦</div>
-          <div class="super-stat-content">
-            <h3 id="statActiveWp">24 Active</h3>
-            <p>Work Packages</p>
-          </div>
-        </div>
-        <div class="super-stat-card">
-          <div class="super-stat-icon">👥</div>
-          <div class="super-stat-content">
-            <h3 id="statCrewCount">48 Crew</h3>
-            <p>Deployed Manpower</p>
-          </div>
-        </div>
-        <div class="super-stat-card">
-          <div class="super-stat-icon">🚜</div>
-          <div class="super-stat-content">
-            <h3>3 Cranes</h3>
-            <p>Tandem Lift Cell</p>
-          </div>
-        </div>
-        <div class="super-stat-card">
-          <div class="super-stat-icon">🧰</div>
-          <div class="super-stat-content">
-            <h3>100% Valid</h3>
-            <p>Store Form 11 Tackles</p>
-          </div>
-        </div>
-        <div class="super-stat-card">
-          <div class="super-stat-icon">🛡️</div>
-          <div class="super-stat-content">
-            <h3>4 Active</h3>
-            <p>Safety PTW Clearances</p>
-          </div>
-        </div>
+    <div class="super-stats-grid">
+      <div class="super-stat-card">
+        <div class="stat-label"><span>🏗️</span> Heavy Lift Progress</div>
+        <div class="stat-value" id="statErectionProgress">68.5%</div>
+        <div class="stat-sub">Axle 75.0% · Wheel 60.0% · MS 69.2%</div>
+      </div>
+      <div class="super-stat-card">
+        <div class="stat-label"><span>📋</span> Active Work Packages</div>
+        <div class="stat-value" id="statActiveWp">12 Active</div>
+        <div class="stat-sub">8-State Lifecycle Enforced</div>
+      </div>
+      <div class="super-stat-card">
+        <div class="stat-label"><span>👥</span> Operations Manpower</div>
+        <div class="stat-value" id="statCrewCount">16 Deployed</div>
+        <div class="stat-sub">100% Form 11 & TPI Qualified</div>
+      </div>
+      <div class="super-stat-card">
+        <div class="stat-label"><span>🚧</span> Managed Site Holds</div>
+        <div class="stat-value" id="statActiveHolds" style="color: #fbbf24;">4 Active</div>
+        <div class="stat-sub">0 Safety Incidents · PTWs Cleared</div>
       </div>
     </div>
   </section>
 
-  <!-- 3. NAVIGATION TABS BAR -->
-  <nav class="tabs-nav-bar">
+  <!-- 3. NAVIGATION TABS BAR (LOCKED BEDS STANDARD: BLACK IN LIGHT, WHITE IN DARK) -->
+  <nav class="tabs-nav-bar" id="master-nav-tabs">
     <div class="tabs-container">
       <button class="nav-tab-btn active" onclick="switchTab('tab-workspaces', this)">
-        🏗️ 3 Execution Workspaces
+        🏗️ Line Axle (WP: 3)
+      </button>
+      <button class="nav-tab-btn" onclick="switchTab('tab-wheel', this)">
+        ⚙️ Line Wheel (WP: 3)
       </button>
       <button class="nav-tab-btn" onclick="switchTab('tab-machine-shop', this)">
-        🏭 Machine Shop Taxonomy
-      </button>
-      <button class="nav-tab-btn" onclick="switchTab('tab-reconciliation', this)">
-        ⚖️ Quantity Reconciliation
-      </button>
-      <button class="nav-tab-btn" onclick="switchTab('tab-sow-boundaries', this)">
-        🛠️ Mechanical SOW Scope
+        🏭 Machine Shop Bay (7 Streams)
       </button>
       <button class="nav-tab-btn" onclick="switchTab('tab-work-packages', this)">
-        📋 8-State Work Packages
-      </button>
-      <button class="nav-tab-btn" onclick="switchTab('tab-manpower', this)">
-        👥 Manpower & Baseline
+        📋 Work Packages (12 Active)
       </button>
       <button class="nav-tab-btn" onclick="switchTab('tab-shift-logbook', this)">
-        📝 Daily Shift Logbook
+        📝 Shift Logbook (6 Logs)
       </button>
-      <button class="nav-tab-btn" onclick="switchTab('tab-discrepancies', this)">
-        ⚠️ Discrepancy Register (C-01 to C-12)
+      <button class="nav-tab-btn" onclick="switchTab('tab-manpower', this)">
+        👥 Manpower Roster (16 Crew)
+      </button>
+      <button class="nav-tab-btn" onclick="switchTab('tab-reconciliation', this)">
+        ⚖️ SOW Reconciliation (31 Units)
+      </button>
+      <button class="nav-tab-btn" onclick="switchTab('tab-holds', this)">
+        ⚠️ Site Holds & Bottlenecks (4 Active)
       </button>
     </div>
   </nav>
@@ -673,164 +783,191 @@
   <!-- 4. TAB PANES -->
   <main class="portal-main">
 
-    <!-- TAB 1: 3 EXECUTION WORKSPACES -->
+    <!-- TAB 1: LINE AXLE -->
     <div id="tab-workspaces" class="tab-pane active">
       <div class="card-panel">
         <div class="card-panel-header">
-          <h3>🏗️ Three Locked Operational Workspaces (§02 Specification)</h3>
-          <span class="tag-chip tag-cyan">Umbrella Context: JUPITER (Non-Execution Line)</span>
+          <h3>🏗️ Line Axle • Schuler Axle Forging Press Cell (Workspace 1)</h3>
+          <span class="tag-chip tag-cyan">Historical Baseline: 717 Man-Days (6,453 h)</span>
         </div>
         <p style="font-size: 13px; color: var(--beds-text-secondary); margin-bottom: 20px;">
-          As governed by V7.2 architecture standards, <strong>JUPITER</strong> is strictly the umbrella project context—it is NOT a third Schuler forging line. Execution is partitioned into three locked workspaces:
+          Controls mechanical installation of the Schuler Axle Forging Press crown, uprights, hydraulic pullers, and multi-axle modular trailer haulage to the press pit.
         </p>
 
         <div class="grid-3">
-          <!-- LINE-AXLE -->
-          <div class="workspace-card" style="border-top: 4px solid #3b82f6;">
-            <span class="ws-badge ws-badge-axle">Workspace 1 • LINE-AXLE</span>
-            <h4 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 800;">Axle Forging Line & Heavy Press</h4>
-            <p style="font-size: 12.5px; color: var(--beds-text-secondary); line-height: 1.5; margin-bottom: 14px;">
-              Schuler Axle Forging Press cell installation, hydraulic puller mobilization, multi-axle trailer haulage, and foundation positioning.
+          <div class="workspace-card" style="border-top: 4px solid #2563eb;">
+            <span class="ws-badge ws-badge-axle">AST-AXLE-SCH-01</span>
+            <h4 style="margin: 0 0 6px 0; font-size: 15px; font-weight: 800;">Press Crown Tandem Lift</h4>
+            <p style="font-size: 12px; color: var(--beds-text-secondary); margin-bottom: 12px;">
+              Crown hoisted 4.5m on columns; rough levelling tolerance 0.8mm verified.
             </p>
-            <div style="background: var(--super-bg); border-radius: 6px; padding: 10px 14px; margin-bottom: 14px; font-size: 12px;">
-              <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                <span>Historical Baseline:</span> <strong>717 Man-Days (6,453 h)</strong>
-              </div>
-              <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                <span>Active Work Packages:</span> <strong>8 Packages</strong>
-              </div>
-              <div style="display: flex; justify-content: space-between;">
-                <span>Erection Progress:</span> <strong>72.5% Completed</strong>
-              </div>
+            <div style="font-size: 12px; background: var(--super-bg); padding: 8px 12px; border-radius: 6px; margin-bottom: 12px;">
+              <div>Cranes: <strong>Demag 250T + Sany 150T</strong></div>
+              <div>Supervisor: <strong>Dilip Rout</strong></div>
+              <div>Erection Progress: <strong>75% Completed</strong></div>
             </div>
-            <div style="margin-top: auto; display: flex; gap: 8px;">
-              <span class="tag-chip tag-green">Tandem Lift Cleared</span>
-              <span class="tag-chip tag-cyan">PTW-AXLE-049 Active</span>
-            </div>
+            <div style="margin-top:auto;"><span class="tag-chip tag-green">PTW-AXLE-049 Active</span></div>
           </div>
 
-          <!-- LINE-WHEEL -->
-          <div class="workspace-card" style="border-top: 4px solid #10b981;">
-            <span class="ws-badge ws-badge-wheel">Workspace 2 • LINE-WHEEL</span>
-            <h4 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 800;">Wheel Forging Line & Heat Treatment</h4>
-            <p style="font-size: 12.5px; color: var(--beds-text-secondary); line-height: 1.5; margin-bottom: 14px;">
-              Schuler Wheel Forging Press cell assembly, furnace shell rigging, rotary hearth manipulator setting, and press bed rough levelling.
+          <div class="workspace-card" style="border-top: 4px solid #2563eb;">
+            <span class="ws-badge ws-badge-axle">AST-AXLE-PULL-01</span>
+            <h4 style="margin: 0 0 6px 0; font-size: 15px; font-weight: 800;">Hydraulic Puller & Bed Tie-Rods</h4>
+            <p style="font-size: 12px; color: var(--beds-text-secondary); margin-bottom: 12px;">
+              Tie-rod pre-tensioning skid anchored at Bay 2 pit; hydraulic station ready.
             </p>
-            <div style="background: var(--super-bg); border-radius: 6px; padding: 10px 14px; margin-bottom: 14px; font-size: 12px;">
-              <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                <span>Historical Baseline:</span> <strong>1,075 Man-Days (9,675 h)</strong>
-              </div>
-              <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                <span>Active Work Packages:</span> <strong>10 Packages</strong>
-              </div>
-              <div style="display: flex; justify-content: space-between;">
-                <span>Erection Progress:</span> <strong>64.0% Completed</strong>
-              </div>
+            <div style="font-size: 12px; background: var(--super-bg); padding: 8px 12px; border-radius: 6px; margin-bottom: 12px;">
+              <div>Equipment: <strong>Farana 20T + 100T Jacking Skids</strong></div>
+              <div>Supervisor: <strong>Dilip Rout</strong></div>
+              <div>Erection Progress: <strong>35% Completed</strong></div>
             </div>
-            <div style="margin-top: auto; display: flex; gap: 8px;">
-              <span class="tag-chip tag-green">Form 11 Gear Certified</span>
-              <span class="tag-chip tag-cyan">PTW-WHEEL-082 Active</span>
-            </div>
+            <div style="margin-top:auto;"><span class="tag-chip tag-cyan">PTW-AXLE-052 Active</span></div>
           </div>
 
-          <!-- AREA-MACHINE-SHOP-AXLE -->
-          <div class="workspace-card" style="border-top: 4px solid #f59e0b;">
-            <span class="ws-badge ws-badge-ms">Workspace 3 • AREA-MACHINE-SHOP-AXLE</span>
-            <h4 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 800;">Axle Machining Bay & Precision Gantry</h4>
-            <p style="font-size: 12.5px; color: var(--beds-text-secondary); line-height: 1.5; margin-bottom: 14px;">
-              Complete Axle Machining Line: FFG Lathes, MAG UT/MPI cells, GER Grinders, 5 PARI Gantry heads, and automated handling shuttles.
+          <div class="workspace-card" style="border-top: 4px solid #2563eb;">
+            <span class="ws-badge ws-badge-axle">AST-AXLE-SCH-02</span>
+            <h4 style="margin: 0 0 6px 0; font-size: 15px; font-weight: 800;">Multi-Axle Modular Trailer Haulage</h4>
+            <p style="font-size: 12px; color: var(--beds-text-secondary); margin-bottom: 12px;">
+              Site gate reception, internal road survey cleared; awaiting plant road permit.
             </p>
-            <div style="background: var(--super-bg); border-radius: 6px; padding: 10px 14px; margin-bottom: 14px; font-size: 12px;">
-              <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                <span>Historical Baseline:</span> <strong>0 MD (First Principles)</strong>
-              </div>
-              <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                <span>Active Work Packages:</span> <strong>6 Packages</strong>
-              </div>
-              <div style="display: flex; justify-content: space-between;">
-                <span>Erection Progress:</span> <strong>69.2% Completed</strong>
-              </div>
+            <div style="font-size: 12px; background: var(--super-bg); padding: 8px 12px; border-radius: 6px; margin-bottom: 12px;">
+              <div>Equipment: <strong>8-Axle Hydraulic Modular Trailer</strong></div>
+              <div>Supervisor: <strong>Dilip Rout</strong></div>
+              <div>Erection Progress: <strong>15% Completed</strong></div>
             </div>
-            <div style="margin-top: auto; display: flex; gap: 8px;">
-              <span class="tag-chip tag-amber">7 Sub-Workstreams</span>
-              <span class="tag-chip tag-purple">GH01–GH05 Gantries</span>
-            </div>
+            <div style="margin-top:auto;"><span class="tag-chip tag-amber">Road Permit Pending</span></div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- TAB 2: MACHINE SHOP TAXONOMY -->
+    <!-- TAB 2: LINE WHEEL -->
+    <div id="tab-wheel" class="tab-pane">
+      <div class="card-panel">
+        <div class="card-panel-header">
+          <h3>⚙️ Line Wheel • Schuler Wheel Forging Press & Furnace (Workspace 2)</h3>
+          <span class="tag-chip tag-green">Historical Baseline: 1,075 Man-Days (9,675 h)</span>
+        </div>
+        <p style="font-size: 13px; color: var(--beds-text-secondary); margin-bottom: 20px;">
+          Controls assembly of the 8,000T Monobloc frame, rotary hearth furnace shell casing segments, and high-speed rail manipulator.
+        </p>
+
+        <div class="grid-3">
+          <div class="workspace-card" style="border-top: 4px solid #059669;">
+            <span class="ws-badge ws-badge-wheel">AST-WHEEL-SCH-01</span>
+            <h4 style="margin: 0 0 6px 0; font-size: 15px; font-weight: 800;">Monobloc Bed Pit Lowering</h4>
+            <p style="font-size: 12px; color: var(--beds-text-secondary); margin-bottom: 12px;">
+              Foundation pit center checked by surveyor; baseplate anchored on shims.
+            </p>
+            <div style="font-size: 12px; background: var(--super-bg); padding: 8px 12px; border-radius: 6px; margin-bottom: 12px;">
+              <div>Cranes: <strong>Demag 250T + Sany 150T</strong></div>
+              <div>Weight: <strong>650.0 MT (Heaviest Module)</strong></div>
+              <div>Erection Progress: <strong>60% Completed</strong></div>
+            </div>
+            <div style="margin-top:auto;"><span class="tag-chip tag-green">PTW-WHEEL-031 Active</span></div>
+          </div>
+
+          <div class="workspace-card" style="border-top: 4px solid #059669;">
+            <span class="ws-badge ws-badge-wheel">AST-WHEEL-FRN-01</span>
+            <h4 style="margin: 0 0 6px 0; font-size: 15px; font-weight: 800;">Rotary Hearth Furnace Casing</h4>
+            <p style="font-size: 12px; color: var(--beds-text-secondary); margin-bottom: 12px;">
+              Furnace shell segments positioned; pedestal concrete 7-day cube cure ongoing.
+            </p>
+            <div style="font-size: 12px; background: var(--super-bg); padding: 8px 12px; border-radius: 6px; margin-bottom: 12px;">
+              <div>Rigging Crane: <strong>Demag 250T Main Boom 42m</strong></div>
+              <div>Weight: <strong>280.0 MT</strong></div>
+              <div>Erection Progress: <strong>10% Completed</strong></div>
+            </div>
+            <div style="margin-top:auto;"><span class="tag-chip tag-amber">7-Day Cure Report Pending</span></div>
+          </div>
+
+          <div class="workspace-card" style="border-top: 4px solid #059669;">
+            <span class="ws-badge ws-badge-wheel">AST-WHEEL-MAN-01</span>
+            <h4 style="margin: 0 0 6px 0; font-size: 15px; font-weight: 800;">Billet High-Speed Manipulator</h4>
+            <p style="font-size: 12px; color: var(--beds-text-secondary); margin-bottom: 12px;">
+              Rail track alignment survey ongoing; carriage ready for mounting.
+            </p>
+            <div style="font-size: 12px; background: var(--super-bg); padding: 8px 12px; border-radius: 6px; margin-bottom: 12px;">
+              <div>Rigging Tool: <strong>Hydra 20T Pick & Carry</strong></div>
+              <div>Weight: <strong>35.0 MT</strong></div>
+              <div>Erection Progress: <strong>5% Completed</strong></div>
+            </div>
+            <div style="margin-top:auto;"><span class="tag-chip tag-cyan">PTW-WHEEL-041 Pending</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: MACHINE SHOP TAXONOMY -->
     <div id="tab-machine-shop" class="tab-pane">
       <div class="card-panel">
         <div class="card-panel-header">
-          <h3>🏭 Machine Shop Workstream & Asset Taxonomy (§03 Specification)</h3>
-          <span class="tag-chip tag-purple">Bay: AREA-MACHINE-SHOP-AXLE</span>
+          <h3>🏭 Machine Shop Taxonomy • 7 Controlled Workstreams (Workspace 3)</h3>
+          <span class="tag-chip tag-purple">AREA-MACHINE-SHOP-AXLE</span>
         </div>
-        <p style="font-size: 13px; color: var(--beds-text-secondary); margin-bottom: 18px;">
-          Workstream classification and OEM attribution are strictly segregated. Unverified equipment is retained in <code>MS-OEM-PENDING</code>:
+        <p style="font-size: 13px; color: var(--beds-text-secondary); margin-bottom: 16px;">
+          The complete Axle Machining Bay is segregated into 7 strict workstreams to ensure OEM attribution integrity:
         </p>
 
         <div class="table-responsive">
           <table class="beds-table">
             <thead>
               <tr>
-                <th>Workstream Code</th>
-                <th>Workstream Name</th>
-                <th>Covered Machinery & Assets</th>
-                <th>OEM / Association Baseline</th>
-                <th>Verification Notice & Safeguard</th>
+                <th>Stream Code</th>
+                <th>Workstream Discipline</th>
+                <th>Covered Machinery & Scope</th>
+                <th>OEM Attribution</th>
+                <th>Erection Status</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td><strong style="color: #2563eb;">MS-FFG</strong></td>
-                <td>FFG Machines Workstream</td>
-                <td>OP20.1–OP20.4, OP30.1–OP30.4 (Rough & Finish Lathes)</td>
+                <td>FFG CNC Lathe Cells</td>
+                <td>OP20.1–4 (Rough Lathes) & OP30.1–4 (Finish Lathes)</td>
                 <td><span class="tag-chip tag-cyan">VDF Boehringer / FFG</span></td>
-                <td>Verify 450T vs 450 4T suffix directly from machine nameplates.</td>
+                <td><span class="tag-chip tag-green">OP20.1 Levelled (70%)</span></td>
               </tr>
               <tr>
                 <td><strong style="color: #059669;">MS-MAG</strong></td>
-                <td>MAG Associated Assets</td>
-                <td>OP40.1 / OP40.2 (UT), OP80.1 / OP80.2 (MPI)</td>
+                <td>NDT Testing Stations</td>
+                <td>OP40.1/2 Ultrasonic (UT) & OP80.1/2 Magnetic Particle (MPI)</td>
                 <td><span class="tag-chip tag-green">MAG Associate</span></td>
-                <td>Operational association confirmed; actual sub-OEM/model not established.</td>
+                <td><span class="tag-chip tag-cyan">Support Framing Set (40%)</span></td>
               </tr>
               <tr>
                 <td><strong style="color: #d97706;">MS-GER</strong></td>
-                <td>GER Grinding Workstream</td>
-                <td>OP50.1 / OP50.2 (CPT-3000 CNC Grinders)</td>
-                <td><span class="tag-chip tag-amber">GER Grinding</span></td>
-                <td>Serial numbers 25/2050 and 25/2051; track both machines independently.</td>
+                <td>Precision CNC Grinding</td>
+                <td>CPT-3000 CNC Grinders (Serials 25/2050 & 25/2051)</td>
+                <td><span class="tag-chip tag-amber">GER Machine Tools</span></td>
+                <td><span class="tag-chip tag-green">Precision Optical Alignment (80%)</span></td>
               </tr>
               <tr>
                 <td><strong style="color: #7c3aed;">MS-PARI-GANTRY</strong></td>
-                <td>PARI Gantry Systems</td>
+                <td>Automated Overhead Gantries</td>
                 <td>Exactly 5 Physical Gantry Heads (GH01 through GH05)</td>
                 <td><span class="tag-chip tag-purple">PARI Robotics</span></td>
-                <td>Physical heads: 5. Gantry cell sum is 221. IT Point is NOT a gantry head.</td>
+                <td><span class="tag-chip tag-green">GH01-GH03 Hung & Meshed (65%)</span></td>
               </tr>
               <tr>
                 <td><strong style="color: #0891b2;">MS-AUTO-TRANSFER</strong></td>
-                <td>Automation & Transfer</td>
-                <td>OP05, OP75 (SPC Shuttle), OP105 (NOK Shuttle), Conveyors</td>
+                <td>Automated Transfer Shuttles</td>
+                <td>OP05 Shuttle, OP75 (SPC Shuttle), OP105 (NOK Shuttle)</td>
                 <td><span class="tag-chip tag-cyan">Automation Handling</span></td>
-                <td>Handling shuttles and conveyors; do not count as gantry heads.</td>
+                <td><span class="tag-chip tag-cyan">Floor Trench Embedded (20%)</span></td>
               </tr>
               <tr>
                 <td><strong style="color: #475569;">MS-AUX</strong></td>
                 <td>Auxiliary Plant Utilities</td>
-                <td>Coolant units, mist collection, filtration, dryers, tanks</td>
-                <td><span class="tag-chip tag-cyan">Utilities Auxiliary</span></td>
-                <td>Supplementary auxiliary systems; verify individual package associations.</td>
+                <td>Central coolant filtration, mist collection, chiller skids</td>
+                <td><span class="tag-chip tag-cyan">Knoll / Donaldson</span></td>
+                <td><span class="tag-chip tag-cyan">Headers Welded 50% (45%)</span></td>
               </tr>
               <tr>
                 <td><strong style="color: #dc2626;">MS-OEM-PENDING</strong></td>
                 <td>Controlled Temporary Queue</td>
-                <td>OP10.1 / OP10.2, OP60 CSM-H19</td>
+                <td>Unallocated staging components awaiting vendor packing match</td>
                 <td><span class="tag-chip tag-red">Pending Attribution</span></td>
-                <td>Controlled queue for unconfirmed OEM attribution. Do not assume FFG or MAG.</td>
+                <td><span class="tag-chip tag-amber">4 Crates in Queue</span></td>
               </tr>
             </tbody>
           </table>
@@ -838,141 +975,39 @@
       </div>
     </div>
 
-    <!-- TAB 3: QUANTITY RECONCILIATION -->
-    <div id="tab-reconciliation" class="tab-pane">
-      <div class="card-panel">
-        <div class="card-panel-header">
-          <h3>⚖️ Equipment Register & Reconciliation Controls (§04 Specification)</h3>
-          <span class="tag-chip tag-cyan">Protected Excel Master • Read-Only Assurance</span>
-        </div>
-        <p style="font-size: 13px; color: var(--beds-text-secondary); margin-bottom: 18px;">
-          The system strictly distinguishes between physical machine count, station count, commercial units, package count, Qty-cell sum, and calculated weight:
-        </p>
-
-        <div class="table-responsive">
-          <table class="beds-table">
-            <thead>
-              <tr>
-                <th>Measure Category</th>
-                <th>Governing Value</th>
-                <th>Strict Source Interpretation</th>
-                <th>Regulatory & Operational Boundary</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong>RFQ Station Entries</strong></td>
-                <td><span class="tag-chip tag-cyan" style="font-size: 13px;">30 Rows</span></td>
-                <td>RFQ engineering schedule rows</td>
-                <td>Schedule entries; not physical equipment count.</td>
-              </tr>
-              <tr>
-                <td><strong>Commercial SOW Units</strong></td>
-                <td><span class="tag-chip tag-green" style="font-size: 13px;">31 Units</span></td>
-                <td>Commercially scheduled equipment units</td>
-                <td>Contractual equipment billing units.</td>
-              </tr>
-              <tr>
-                <td><strong>Main Packing List Qty Sum</strong></td>
-                <td><span class="tag-chip tag-amber" style="font-size: 13px;">334 Sum</span></td>
-                <td>Mathematical sum of Qty cells</td>
-                <td>Sum of spreadsheet cells; NOT 334 physical crates or boxes.</td>
-              </tr>
-              <tr>
-                <td><strong>Main Packing Gross Weight</strong></td>
-                <td><span class="tag-chip tag-purple" style="font-size: 13px;">1,796.114 MT</span></td>
-                <td>Provisional calculated gross weight</td>
-                <td>Provisional calculation; not certified billable weight.</td>
-              </tr>
-              <tr>
-                <td><strong>Supplementary Weight (OP40/50/80)</strong></td>
-                <td><span class="tag-chip tag-purple" style="font-size: 13px;">~131.200 MT</span></td>
-                <td>Approximate supplementary equipment</td>
-                <td>Supplementary gross weight; verify against weighbridge receipts.</td>
-              </tr>
-              <tr>
-                <td><strong>Combined Indicative Gross Weight</strong></td>
-                <td><span class="tag-chip tag-cyan" style="font-size: 13px;">1,927.314 MT</span></td>
-                <td>Indicative combined gross weight</td>
-                <td>Arithmetic combination only; not certified commercial billable.</td>
-              </tr>
-              <tr>
-                <td><strong>Physical PARI Gantry Heads</strong></td>
-                <td><span class="tag-chip tag-green" style="font-size: 13px;">5 Physical Heads</span></td>
-                <td>GH01, GH02, GH03, GH04, GH05</td>
-                <td>Exactly 5 physical heads. IT Point is not a 6th gantry head.</td>
-              </tr>
-              <tr>
-                <td><strong>PARI Packing List Qty Sum</strong></td>
-                <td><span class="tag-chip tag-amber" style="font-size: 13px;">221 Sum</span></td>
-                <td>Qty-column arithmetic sum</td>
-                <td>Arithmetic cell sum; not 221 physical gantries.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- TAB 4: SOW BOUNDARIES -->
-    <div id="tab-sow-boundaries" class="tab-pane">
-      <div class="card-panel">
-        <div class="card-panel-header">
-          <h3>🛠️ Mechanical Scope of Work (SOW) Boundaries (§05 Specification)</h3>
-          <span class="tag-chip tag-green">Enforced Contractual Scope Baseline</span>
-        </div>
-        <p style="font-size: 13px; color: var(--beds-text-secondary); margin-bottom: 20px;">
-          Machine Shop BALSONS mechanical scope is strictly bounded to agreed erection activities. Hard exclusions require formal client commercial variation before execution:
-        </p>
-
-        <div class="grid-2">
-          <!-- INCLUDED -->
-          <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 20px;">
-            <h4 style="margin: 0 0 14px 0; color: #166534; font-size: 15px; display: flex; align-items: center; gap: 8px;">
-              <span>✔</span> BALSONS Mechanical Scope (Included Baseline)
-            </h4>
-            <ul style="margin: 0; padding-left: 20px; font-size: 13px; color: #14532d; line-height: 1.8;">
-              <li><strong>1. Unloading & controlled receipt:</strong> Lifting from transport trailers onto laydown area.</li>
-              <li><strong>2. Unpacking & component identification:</strong> De-crating, tag cross-verification with packing lists.</li>
-              <li><strong>3. Cleaning & preparation:</strong> Anti-rust coating degreasing and surface wiping.</li>
-              <li><strong>4. Internal shifting:</strong> Rigging and moving machine assemblies near/on foundation pockets.</li>
-              <li><strong>5. Mechanical installation:</strong> Placement on base plates and mounting bolts.</li>
-              <li><strong>6. Rough levelling:</strong> Initial spirit/laser levelling to within &plusmn;1.0 mm tolerance.</li>
-              <li><strong>7. X-Y axis positioning:</strong> Centerline alignment with bay coordinates and benchmarks.</li>
-            </ul>
-          </div>
-
-          <!-- EXCLUDED -->
-          <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 20px;">
-            <h4 style="margin: 0 0 14px 0; color: #991b1b; font-size: 15px; display: flex; align-items: center; gap: 8px;">
-              <span>⛔</span> Strict Exclusions (Client / OEM Scope — No Proxy Work)
-            </h4>
-            <ul style="margin: 0; padding-left: 20px; font-size: 13px; color: #7f1d1d; line-height: 1.8;">
-              <li><strong>1. Electrical installation:</strong> Cabling, cable tray laying, panel wiring, terminations.</li>
-              <li><strong>2. PLC / CNC integration:</strong> Automation bus wiring, fieldbus setup, CNC program loading.</li>
-              <li><strong>3. Civil / foundation work:</strong> Foundation casting, core cutting, pocket chipping, grouting.</li>
-              <li><strong>4. Final precision levelling:</strong> Sub-micron geometric certification and laser interferometer checks.</li>
-              <li><strong>5. Calibration & OEM commissioning:</strong> Spindle balancing, sensor tuning, OEM cold run.</li>
-              <li><strong>6. Production trials:</strong> Live machining, chip-making, CPK/PPK statistical acceptance.</li>
-              <li><strong>7. Unapproved scope:</strong> Any work not explicitly recorded in written SOW variation.</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- TAB 5: WORK PACKAGES -->
+    <!-- TAB 4: WORK PACKAGES -->
     <div id="tab-work-packages" class="tab-pane">
       <div class="card-panel">
         <div class="card-panel-header">
-          <h3>📋 8-State Work Packages Lifecycle Engine (§06 & §08)</h3>
-          <button class="beds-btn beds-btn-sm beds-btn-primary" onclick="BalsonsOpsApp.openCreateWpModal()">
+          <h3>📋 8-State Work Packages Lifecycle Engine</h3>
+          <button class="btn-action-pill" onclick="BalsonsOpsApp.openCreateWpModal()">
             ➕ Create Work Package
           </button>
         </div>
-        <p style="font-size: 13px; color: var(--beds-text-secondary); margin-bottom: 16px;">
-          The work package is the primary operational execution object. Changes are persisted in local-first IndexedDB:
-        </p>
+
+        <!-- Filter Toolbar -->
+        <div class="filter-toolbar-row">
+          <div class="filter-search-box">
+            <span>🔍</span>
+            <input type="text" id="wpSearchInput" placeholder="Search by ID, title, asset, supervisor..." oninput="BalsonsOpsApp.filterWorkPackages()">
+          </div>
+          <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+            <select id="wpWorkspaceFilter" class="form-control" style="width:auto; padding:6px 10px;" onchange="BalsonsOpsApp.filterWorkPackages()">
+              <option value="ALL">All Workspaces (12)</option>
+              <option value="LINE-AXLE">Line Axle (3)</option>
+              <option value="LINE-WHEEL">Line Wheel (3)</option>
+              <option value="AREA-MACHINE-SHOP-AXLE">Machine Shop Bay (6)</option>
+            </select>
+            <select id="wpStateFilter" class="form-control" style="width:auto; padding:6px 10px;" onchange="BalsonsOpsApp.filterWorkPackages()">
+              <option value="ALL">All Lifecycle States</option>
+              <option value="In progress">In progress</option>
+              <option value="Mobilized">Mobilized</option>
+              <option value="Planned">Planned</option>
+              <option value="Scope verified">Scope verified</option>
+              <option value="Ready for planning">Ready for planning</option>
+            </select>
+          </div>
+        </div>
 
         <div class="table-responsive">
           <table class="beds-table">
@@ -995,98 +1030,63 @@
       </div>
     </div>
 
-    <!-- TAB 6: MANPOWER & BASELINE -->
-    <div id="tab-manpower" class="tab-pane">
+    <!-- TAB 5: SHIFT LOGBOOK -->
+    <div id="tab-shift-logbook" class="tab-pane">
       <div class="card-panel">
         <div class="card-panel-header">
-          <h3>👥 Manpower Planning & Historical Schuler Baseline (§07 & §08)</h3>
-          <span class="tag-chip tag-cyan">8-Stage Manpower Model</span>
+          <h3>📝 Daily Shift Execution Logbook & Handover</h3>
+          <button class="btn-action-pill" onclick="BalsonsOpsApp.openNewShiftModal()">
+            📝 Record Shift Handover
+          </button>
         </div>
+        <p style="font-size: 13px; color: var(--beds-text-secondary); margin-bottom: 16px;">
+          Shift log records dual-shift execution (Shift A / Shift B), tandem crane coordination, Store Form 11 tackle compliance, and Safety PTW active permit status:
+        </p>
 
-        <div class="grid-2" style="margin-bottom: 24px;">
-          <!-- 8 STATES -->
-          <div>
-            <h4 style="font-size: 14px; font-weight: 700; margin-top: 0;">8 Manpower Lifecycle States</h4>
-            <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12.5px;">
-              <div style="background: var(--super-bg); padding: 8px 12px; border-radius: 6px; border-left: 3px solid #3b82f6;">
-                <strong>1. REQUIRED:</strong> Demand generated by workspace, package, trade, shift.
-              </div>
-              <div style="background: var(--super-bg); padding: 8px 12px; border-radius: 6px; border-left: 3px solid #06b6d4;">
-                <strong>2. AVAILABLE:</strong> Resource rostered; pending qualification/clearance check.
-              </div>
-              <div style="background: var(--super-bg); padding: 8px 12px; border-radius: 6px; border-left: 3px solid #10b981;">
-                <strong>3. QUALIFIED:</strong> Trade/skill certificate verified by HR/authoritative source.
-              </div>
-              <div style="background: var(--super-bg); padding: 8px 12px; border-radius: 6px; border-left: 3px solid #84cc16;">
-                <strong>4. CLEARED:</strong> Safety induction, medical & gate access valid for shift.
-              </div>
-              <div style="background: var(--super-bg); padding: 8px 12px; border-radius: 6px; border-left: 3px solid #f59e0b;">
-                <strong>5. ALLOCATED:</strong> Assigned to named work package, shift, date range.
-              </div>
-              <div style="background: var(--super-bg); padding: 8px 12px; border-radius: 6px; border-left: 3px solid #f97316;">
-                <strong>6. MOBILIZED:</strong> Reported on site with muster attendance confirmed.
-              </div>
-              <div style="background: var(--super-bg); padding: 8px 12px; border-radius: 6px; border-left: 3px solid #22c55e;">
-                <strong>7. DEPLOYED:</strong> Actively executing on assembly floor; supervisor confirms.
-              </div>
-              <div style="background: var(--super-bg); padding: 8px 12px; border-radius: 6px; border-left: 3px solid #64748b;">
-                <strong>8. RELEASED:</strong> Shift handover completed; actual end time recorded.
-              </div>
-            </div>
-          </div>
-
-          <!-- HISTORICAL BASELINE TABLE -->
-          <div>
-            <h4 style="font-size: 14px; font-weight: 700; margin-top: 0;">Historical Schuler Manpower Baseline</h4>
-            <table class="beds-table" style="font-size: 12px;">
-              <thead>
-                <tr>
-                  <th>Metric Attribute</th>
-                  <th>Wheel Forging Line</th>
-                  <th>Axle Forging Line</th>
-                  <th>Combined Forge Line</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><strong>Man-Days (MD)</strong></td>
-                  <td>1,075 MD</td>
-                  <td>717 MD</td>
-                  <td><strong style="color: #2563eb;">1,792 MD</strong></td>
-                </tr>
-                <tr>
-                  <td><strong>Hours (at 9 h/MD)</strong></td>
-                  <td>9,675 Hours</td>
-                  <td>6,453 Hours</td>
-                  <td><strong style="color: #2563eb;">16,128 Hours</strong></td>
-                </tr>
-                <tr>
-                  <td><strong>Planning Period</strong></td>
-                  <td>01-Oct-26 to 29-Jul-27</td>
-                  <td>44 Weeks Stated</td>
-                  <td>44 Weeks Baseline</td>
-                </tr>
-              </tbody>
-            </table>
-            <div style="margin-top: 14px; background: #fffbeb; border: 1px solid #fde68a; border-radius: 6px; padding: 12px; font-size: 12px; color: #b45309;">
-              <strong>⚠️ CRITICAL GOVERNANCE SAFEGUARD:</strong><br>
-              The 9-hour-per-man-day conversion is a derived project assumption and must not be used for contractual billing or payroll without explicit project director sign-off. This historical baseline applies <strong>ONLY</strong> to the Schuler Forge Shop lines. <strong>Machine Shop has ZERO historical baseline assumed.</strong>
-            </div>
-          </div>
-        </div>
-
-        <h4 style="font-size: 14px; font-weight: 700; margin: 18px 0 10px 0;">Active Operational Deployment Roster</h4>
         <div class="table-responsive">
           <table class="beds-table">
             <thead>
               <tr>
-                <th>Personnel ID</th>
-                <th>Employee Name</th>
-                <th>Trade / Skill</th>
-                <th>Assigned WP</th>
-                <th>Shift</th>
+                <th>Log Ref ID</th>
+                <th>Date & Shift</th>
+                <th>Area / Stream</th>
+                <th>Supervisor & Crew</th>
+                <th>Milestones & Crane Config</th>
+                <th>Handover Critical Notes</th>
+              </tr>
+            </thead>
+            <tbody id="shiftLogsBody">
+              <!-- Populated by BalsonsOpsApp -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 6: MANPOWER ROSTER -->
+    <div id="tab-manpower" class="tab-pane">
+      <div class="card-panel">
+        <div class="card-panel-header">
+          <h3>👥 Manpower Allocation & 8-Stage Lifecycle Model</h3>
+          <span class="tag-chip tag-cyan">16 Active Certified Personnel</span>
+        </div>
+        <p style="font-size: 13px; color: var(--beds-text-secondary); margin-bottom: 16px;">
+          Personnel transition through 8 governed stages: <code>REQUIRED ➔ AVAILABLE ➔ QUALIFIED ➔ CLEARED ➔ ALLOCATED ➔ MOBILIZED ➔ DEPLOYED ➔ RELEASED</code>. Click <strong>Cycle State</strong> to simulate lifecycle transition:
+        </p>
+
+        <div class="table-responsive">
+          <table class="beds-table">
+            <thead>
+              <tr>
+                <th>Badge No</th>
+                <th>Full Name</th>
+                <th>Designation</th>
+                <th>Trade</th>
+                <th>Medical Fitness</th>
+                <th>TPI Cert</th>
+                <th>Form 11</th>
                 <th>Lifecycle State</th>
-                <th>Action</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody id="manpowerTableBody">
@@ -1097,132 +1097,156 @@
       </div>
     </div>
 
-    <!-- TAB 7: SHIFT LOGBOOK -->
-    <div id="tab-shift-logbook" class="tab-pane">
+    <!-- TAB 7: QUANTITY RECONCILIATION -->
+    <div id="tab-reconciliation" class="tab-pane">
       <div class="card-panel">
         <div class="card-panel-header">
-          <h3>📝 Daily Site Execution & Shift Logbook (§09 Specification)</h3>
-          <button class="beds-btn beds-btn-sm beds-btn-primary" onclick="BalsonsOpsApp.openNewShiftModal()">
-            ➕ New Shift Log Entry
-          </button>
+          <h3>⚖️ Statement of Work (SOW) & Asset Register Reconciliation</h3>
+          <span class="tag-chip tag-green">Excel Master Read-Only Assurance</span>
         </div>
-
-        <div class="table-responsive">
-          <table class="beds-table">
-            <thead>
-              <tr>
-                <th>Log ID</th>
-                <th>Date</th>
-                <th>Shift Code</th>
-                <th>Supervisor</th>
-                <th>Cranes Deployed</th>
-                <th>Store Form 11 Status</th>
-                <th>Safety PTW Status</th>
-                <th>Key Shift Milestone</th>
-              </tr>
-            </thead>
-            <tbody id="shiftLogTableBody">
-              <!-- Populated by BalsonsOpsApp -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- TAB 8: DISCREPANCIES -->
-    <div id="tab-discrepancies" class="tab-pane">
-      <div class="card-panel">
-        <div class="card-panel-header">
-          <h3>⚠️ Discrepancy & Owner Decision Register (§18 Specification)</h3>
-          <span class="tag-chip tag-amber">12 Open Audit Items (C-01 to C-12)</span>
-        </div>
-        <p style="font-size: 13px; color: var(--beds-text-secondary); margin-bottom: 18px;">
-          As mandated by Section 18 of the governing reference, open discrepancies remain pending formal owner decision. Safe interim positions are strictly enforced:
+        <p style="font-size: 13px; color: var(--beds-text-secondary); margin-bottom: 16px;">
+          Reconciles 30 RFQ Station Entries against 31 Commercial SOW Scheduled Units, 1,927.314 MT indicative weight, and exactly 5 physical overhead gantries:
         </p>
 
         <div class="table-responsive">
           <table class="beds-table">
             <thead>
               <tr>
-                <th>Ref ID</th>
-                <th>Subject & Discrepancy Description</th>
-                <th>Safe Interim Position (Locked Baseline)</th>
-                <th>Status</th>
+                <th>Item</th>
+                <th>Equipment Description</th>
+                <th>SOW Qty</th>
+                <th>RFQ Station Ref</th>
+                <th>Weight (MT)</th>
+                <th>Workspace</th>
+                <th>Discrepancy Category</th>
+                <th>Resolution Status</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td><code>C-01</code></td>
-                <td>Confirm OP10.1 / OP10.2 OEM attribution.</td>
-                <td>Keep in MS-OEM-PENDING. Do not assume FFG or MAG.</td>
-                <td><span class="tag-chip tag-amber">Pending Client</span></td>
+                <td><strong>1</strong></td>
+                <td>Schuler Axle Forging Press Cell Complete</td>
+                <td>1</td>
+                <td><code>STN-AXLE-PRS-01</code></td>
+                <td><strong style="color:var(--beds-teal-primary);">845.50 MT</strong></td>
+                <td>LINE-AXLE</td>
+                <td><span class="tag-chip tag-green">MATCHED</span></td>
+                <td><span class="tag-chip tag-green">APPROVED</span></td>
               </tr>
               <tr>
-                <td><code>C-02</code></td>
-                <td>Verify VDF 450T / 450 4T model suffixes.</td>
-                <td>Use nameplate photographic evidence from site.</td>
-                <td><span class="tag-chip tag-cyan">Under Verification</span></td>
+                <td><strong>2</strong></td>
+                <td>Axle Hydraulic Tie-Rod Tensioning System</td>
+                <td>1</td>
+                <td><code>STN-AXLE-HYD-01</code></td>
+                <td><strong style="color:var(--beds-teal-primary);">45.00 MT</strong></td>
+                <td>LINE-AXLE</td>
+                <td><span class="tag-chip tag-green">MATCHED</span></td>
+                <td><span class="tag-chip tag-green">APPROVED</span></td>
               </tr>
               <tr>
-                <td><code>C-03</code></td>
-                <td>Confirm OP60 CSM-H19 manufacturer & workstream.</td>
-                <td>Keep in pending queue; do not assign without evidence.</td>
-                <td><span class="tag-chip tag-amber">Pending Client</span></td>
+                <td><strong>3</strong></td>
+                <td>Schuler Wheel Forging Press Monobloc & Cylinders</td>
+                <td>1</td>
+                <td><code>STN-WHEEL-PRS-01</code></td>
+                <td><strong style="color:var(--beds-teal-primary);">830.00 MT</strong></td>
+                <td>LINE-WHEEL</td>
+                <td><span class="tag-chip tag-green">MATCHED</span></td>
+                <td><span class="tag-chip tag-green">APPROVED</span></td>
               </tr>
               <tr>
-                <td><code>C-04</code></td>
-                <td>Resolve OP70 / OP72 / OP75 mismatch across RFQ, packing list and SOW.</td>
-                <td>No guessed mapping; obtain client clarification.</td>
-                <td><span class="tag-chip tag-amber">Pending Client</span></td>
+                <td><strong>4</strong></td>
+                <td>Rotary Hearth Furnace Casing Segments Assembly</td>
+                <td>1</td>
+                <td><code>STN-WHEEL-FRN-01</code></td>
+                <td><strong style="color:var(--beds-teal-primary);">280.00 MT</strong></td>
+                <td>LINE-WHEEL</td>
+                <td><span class="tag-chip tag-amber">WEIGHT_VARIATION</span></td>
+                <td><span class="tag-chip tag-amber">CLAIM_SUBMITTED</span></td>
               </tr>
               <tr>
-                <td><code>C-05</code></td>
-                <td>Verify OEM/model for OP40 UT and OP80 MPI.</td>
-                <td>Keep association provisional; confirm sub-OEM.</td>
-                <td><span class="tag-chip tag-cyan">Provisional</span></td>
+                <td><strong>5</strong></td>
+                <td>Wheel High-Speed Manipulator & Rails</td>
+                <td>1</td>
+                <td><code>STN-WHEEL-MAN-01</code></td>
+                <td><strong style="color:var(--beds-teal-primary);">35.00 MT</strong></td>
+                <td>LINE-WHEEL</td>
+                <td><span class="tag-chip tag-green">MATCHED</span></td>
+                <td><span class="tag-chip tag-green">APPROVED</span></td>
               </tr>
               <tr>
-                <td><code>C-06</code></td>
-                <td>Reconcile RFQ station entries 30 vs SOW scheduled units 31.</td>
-                <td>Preserve both measures; do not force artificial equality.</td>
-                <td><span class="tag-chip tag-green">Preserved</span></td>
+                <td><strong>6</strong></td>
+                <td>VDF Boehringer OP20 Rough Turning Lathes</td>
+                <td>4</td>
+                <td><code>STN-MS-FFG-OP20</code></td>
+                <td><strong style="color:var(--beds-teal-primary);">114.00 MT</strong></td>
+                <td>MACHINE-SHOP</td>
+                <td><span class="tag-chip tag-green">MATCHED</span></td>
+                <td><span class="tag-chip tag-green">APPROVED</span></td>
               </tr>
               <tr>
-                <td><code>C-07</code></td>
-                <td>Reconcile packing Qty sum 334 with physical package count.</td>
-                <td>Do not label 334 as package count; represent as cell sum.</td>
-                <td><span class="tag-chip tag-green">Preserved</span></td>
+                <td><strong>7</strong></td>
+                <td>VDF Boehringer OP30 Finish Turning Lathes</td>
+                <td>4</td>
+                <td><code>STN-MS-FFG-OP30</code></td>
+                <td><strong style="color:var(--beds-teal-primary);">114.00 MT</strong></td>
+                <td>MACHINE-SHOP</td>
+                <td><span class="tag-chip tag-green">MATCHED</span></td>
+                <td><span class="tag-chip tag-green">APPROVED</span></td>
               </tr>
               <tr>
-                <td><code>C-08</code></td>
-                <td>Validate provisional main (1,796 MT) and supplementary weights (131 MT).</td>
-                <td>Require approved packing/weighing records before commercial use.</td>
-                <td><span class="tag-chip tag-cyan">Indicative Only</span></td>
+                <td><strong>8</strong></td>
+                <td>GER CPT-3000 CNC Precision Grinders (SN 25/2050, 51)</td>
+                <td>2</td>
+                <td><code>STN-MS-GER-01/02</code></td>
+                <td><strong style="color:var(--beds-teal-primary);">64.00 MT</strong></td>
+                <td>MACHINE-SHOP</td>
+                <td><span class="tag-chip tag-green">MATCHED</span></td>
+                <td><span class="tag-chip tag-green">APPROVED</span></td>
               </tr>
               <tr>
-                <td><code>C-09</code></td>
-                <td>Verify auxiliary quantities/models/package associations.</td>
-                <td>Evidence-based reconciliation per physical receipt.</td>
-                <td><span class="tag-chip tag-cyan">In Progress</span></td>
+                <td><strong>9</strong></td>
+                <td>PARI Automated Overhead Gantry Heads (GH01-GH05)</td>
+                <td>5</td>
+                <td><code>STN-MS-GANTRY-ALL</code></td>
+                <td><strong style="color:var(--beds-teal-primary);">90.00 MT</strong></td>
+                <td>MACHINE-SHOP</td>
+                <td><span class="tag-chip tag-purple">RFQ_DISCREPANCY</span></td>
+                <td><span class="tag-chip tag-purple">5 HEADS RECONCILED</span></td>
               </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 8: HOLDS & DISCREPANCIES -->
+    <div id="tab-holds" class="tab-pane">
+      <div class="card-panel">
+        <div class="card-panel-header">
+          <h3>⚠️ Site Holds, Engineering Bottlenecks & Discrepancies</h3>
+          <button class="btn-action-pill" onclick="BalsonsOpsApp.openRaiseHoldModal()">
+            ⚠️ Raise Site Hold
+          </button>
+        </div>
+        <p style="font-size: 13px; color: var(--beds-text-secondary); margin-bottom: 16px;">
+          Managed bottlenecks impacting mechanical progress. Every hold requires an identified root cause, responsible party, and scheduled resolution target:
+        </p>
+
+        <div class="table-responsive">
+          <table class="beds-table">
+            <thead>
               <tr>
-                <td><code>C-10</code></td>
-                <td>Confirm 9-hour-per-MD contractual conversion basis.</td>
-                <td>Do not use for contractual/payroll calculations until confirmed.</td>
-                <td><span class="tag-chip tag-amber">Safeguard Active</span></td>
+                <th>Hold ID</th>
+                <th>Workspace / Asset</th>
+                <th>Category</th>
+                <th>Description & Root Cause</th>
+                <th>Responsible Party</th>
+                <th>Action & Target Date</th>
+                <th>Status</th>
               </tr>
-              <tr>
-                <td><code>C-11</code></td>
-                <td>Approve separate writable operational store design.</td>
-                <td>Local IndexedDB transactional store active; server sync pending.</td>
-                <td><span class="tag-chip tag-green">Local Store Active</span></td>
-              </tr>
-              <tr>
-                <td><code>C-12</code></td>
-                <td>Approve RPO/RTO, retention and integration SLAs.</td>
-                <td>Do not invent values; require sponsor sign-off.</td>
-                <td><span class="tag-chip tag-amber">Pending Sponsor</span></td>
-              </tr>
+            </thead>
+            <tbody id="holdsTableBody">
+              <!-- Populated by BalsonsOpsApp -->
             </tbody>
           </table>
         </div>
@@ -1231,8 +1255,9 @@
 
   </main>
 
-  <!-- 5. MODALS -->
-  <!-- MODAL: CREATE WORK PACKAGE -->
+  <!-- 5. INTERACTIVE MODALS -->
+
+  <!-- MODAL 1: CREATE WORK PACKAGE -->
   <div id="modalCreateWp" class="ops-modal-overlay">
     <div class="ops-modal-card">
       <div class="ops-modal-header">
@@ -1252,32 +1277,42 @@
           <div class="form-group">
             <label>Child Workstream Code</label>
             <select id="newWpWorkstream" class="form-control" required>
+              <option value="AXLE-PRESS-CELL">AXLE-PRESS-CELL (Schuler Press Assembly)</option>
+              <option value="AXLE-HYDRAULICS">AXLE-HYDRAULICS (Puller & Tensioning)</option>
+              <option value="WHEEL-PRESS-CELL">WHEEL-PRESS-CELL (Monobloc Assembly)</option>
+              <option value="WHEEL-FURNACE">WHEEL-FURNACE (Rotary Furnace Shell)</option>
               <option value="MS-FFG">MS-FFG (Lathes OP20.1-4, OP30.1-4)</option>
-              <option value="MS-MAG">MS-MAG (Associated OP40 UT, OP80 MPI)</option>
               <option value="MS-GER">MS-GER (Grinders OP50.1-2)</option>
               <option value="MS-PARI-GANTRY">MS-PARI-GANTRY (5 Heads GH01-GH05)</option>
               <option value="MS-AUTO-TRANSFER">MS-AUTO-TRANSFER (Shuttles & Handling)</option>
               <option value="MS-AUX">MS-AUX (Utilities Filtration/Coolant)</option>
-              <option value="MS-OEM-PENDING">MS-OEM-PENDING (Unconfirmed Attribution)</option>
-              <option value="AXLE-PRESS-CELL">AXLE-PRESS-CELL (Schuler Press Assembly)</option>
-              <option value="WHEEL-PRESS-CELL">WHEEL-PRESS-CELL (Schuler Press Assembly)</option>
             </select>
           </div>
           <div class="form-group">
             <label>Project Asset ID</label>
-            <input type="text" id="newWpAsset" class="form-control" placeholder="e.g. AST-MS-GER-OP50.2" required>
+            <input type="text" id="newWpAsset" class="form-control" placeholder="e.g. AST-AXLE-SCH-03" required>
           </div>
           <div class="form-group">
             <label>Work Package Title</label>
-            <input type="text" id="newWpTitle" class="form-control" placeholder="Descriptive title of mechanical task" required>
+            <input type="text" id="newWpTitle" class="form-control" placeholder="e.g. Press Crown Hydraulic Manifold Staging" required>
           </div>
-          <div class="form-group">
-            <label>Approved SOW Scope Clause Ref</label>
-            <input type="text" id="newWpScopeRef" class="form-control" value="SOW-MECH-05.3" required>
+          <div style="display: flex; gap: 12px;">
+            <div class="form-group" style="flex:1;">
+              <label>SOW Clause Ref</label>
+              <input type="text" id="newWpScopeRef" class="form-control" value="SOW-MECH-05.1" required>
+            </div>
+            <div class="form-group" style="flex:1;">
+              <label>Assigned Supervisor</label>
+              <select id="newWpSupervisor" class="form-control" required>
+                <option value="Dilip Rout">Dilip Rout (Lifting In-Charge)</option>
+                <option value="Sarat Mishra">Sarat Mishra (Area Manager)</option>
+                <option value="Manoj Das">Manoj Das (Lead Rigger)</option>
+              </select>
+            </div>
           </div>
           <div class="form-group">
             <label>Scope Description</label>
-            <input type="text" id="newWpScopeClause" class="form-control" placeholder="Included mechanical activities only" required>
+            <input type="text" id="newWpScopeClause" class="form-control" placeholder="Approved mechanical activities only" required>
           </div>
           <div style="display: flex; gap: 12px;">
             <div class="form-group" style="flex:1;">
@@ -1290,16 +1325,8 @@
             </div>
           </div>
           <div class="form-group">
-            <label>Assigned Supervisor</label>
-            <select id="newWpSupervisor" class="form-control" required>
-              <option value="Dilip Rout">Dilip Rout (Lifting In-Charge)</option>
-              <option value="Suresh Behera">Suresh Behera (Mechanical Lead)</option>
-              <option value="Kartik Nayak">Kartik Nayak (Rigging Supervisor)</option>
-            </select>
-          </div>
-          <div class="form-group">
             <label>Crane & Rigging Requirements</label>
-            <input type="text" id="newWpCrane" class="form-control" placeholder="e.g. Tandem: Demag 250T + Sany 150T" required>
+            <input type="text" id="newWpCrane" class="form-control" placeholder="e.g. Demag 250T + Sany 150T" required>
           </div>
           <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
             <button type="button" class="beds-btn beds-btn-secondary" onclick="BalsonsOpsApp.closeCreateWpModal()">Cancel</button>
@@ -1310,7 +1337,7 @@
     </div>
   </div>
 
-  <!-- MODAL: MANAGE WORK PACKAGE -->
+  <!-- MODAL 2: MANAGE WORK PACKAGE -->
   <div id="modalManageWp" class="ops-modal-overlay">
     <div class="ops-modal-card">
       <div class="ops-modal-header">
@@ -1318,11 +1345,11 @@
         <button class="ops-modal-close" onclick="BalsonsOpsApp.closeEditModal()">✕</button>
       </div>
       <div class="ops-modal-body">
-        <div style="background:var(--super-bg); padding:12px; border-radius:6px; margin-bottom:16px; font-size:12.5px;">
-          <div style="font-weight:800; font-size:14px; margin-bottom:4px;" id="editWpTitle"></div>
+        <div style="background:var(--super-bg); padding:12px 16px; border-radius:8px; margin-bottom:16px; font-size:12.5px; border:1px solid var(--super-border);">
+          <div style="font-weight:800; font-size:14px; margin-bottom:4px; color:var(--beds-charcoal-heading);" id="editWpTitle"></div>
           <div>Workspace: <span id="editWpWorkspace" style="font-weight:700;"></span></div>
-          <div>Asset: <code id="editWpAsset"></code></div>
-          <div>Scope: <span id="editWpScope"></span></div>
+          <div>Asset ID: <code id="editWpAsset" style="font-weight:700;"></code></div>
+          <div>Approved Scope: <span id="editWpScope"></span></div>
         </div>
 
         <div class="form-group">
@@ -1358,7 +1385,7 @@
     </div>
   </div>
 
-  <!-- MODAL: NEW SHIFT LOG -->
+  <!-- MODAL 3: NEW SHIFT LOG -->
   <div id="modalNewShiftLog" class="ops-modal-overlay">
     <div class="ops-modal-card">
       <div class="ops-modal-header">
@@ -1383,16 +1410,30 @@
           </div>
           <div style="display: flex; gap: 12px;">
             <div class="form-group" style="flex:1;">
+              <label>Workspace</label>
+              <select id="shiftWsSelect" class="form-control" required>
+                <option value="LINE-AXLE">LINE-AXLE</option>
+                <option value="LINE-WHEEL">LINE-WHEEL</option>
+                <option value="AREA-MACHINE-SHOP-AXLE">AREA-MACHINE-SHOP-AXLE</option>
+              </select>
+            </div>
+            <div class="form-group" style="flex:1;">
+              <label>Workstream</label>
+              <input type="text" id="shiftWsStream" class="form-control" value="AXLE-PRESS-CELL" required>
+            </div>
+          </div>
+          <div style="display: flex; gap: 12px;">
+            <div class="form-group" style="flex:1;">
               <label>Area Supervisor</label>
               <select id="shiftSup" class="form-control" required>
-                <option value="Dilip Rout">Dilip Rout</option>
-                <option value="Suresh Behera">Suresh Behera</option>
-                <option value="Kartik Nayak">Kartik Nayak</option>
+                <option value="Dilip Rout">Dilip Rout (Lifting In-Charge)</option>
+                <option value="Sarat Mishra">Sarat Mishra (Area Manager)</option>
+                <option value="Manoj Das">Manoj Das (Lead Rigger)</option>
               </select>
             </div>
             <div class="form-group" style="flex:1;">
               <label>Lead Rigger</label>
-              <input type="text" id="shiftRigger" class="form-control" value="Rabindra Jena" required>
+              <input type="text" id="shiftRigger" class="form-control" value="Manoj Das" required>
             </div>
           </div>
           <div class="form-group">
@@ -1401,7 +1442,7 @@
           </div>
           <div class="form-group">
             <label>Cranes & Heavy Equipment Active</label>
-            <input type="text" id="shiftCranes" class="form-control" value="Demag 250T + Sany 150T (Tandem Lift Cell)" required>
+            <input type="text" id="shiftCranes" class="form-control" value="Demag CC2500 250T + Sany SCC1500 150T" required>
           </div>
           <div class="form-group">
             <label>Store Form 11 Tackle Status</label>
@@ -1428,10 +1469,165 @@
     </div>
   </div>
 
-  <!-- 6. ENTERPRISE FOOTER -->
+  <!-- MODAL 4: RAISE SITE HOLD -->
+  <div id="modalRaiseHold" class="ops-modal-overlay">
+    <div class="ops-modal-card">
+      <div class="ops-modal-header" style="background: rgba(220, 38, 38, 0.08); border-bottom: 2px solid #dc2626;">
+        <h4 style="color:#dc2626;">⚠️ Raise Engineering Hold / Site Bottleneck</h4>
+        <button class="ops-modal-close" onclick="BalsonsOpsApp.closeRaiseHoldModal()">✕</button>
+      </div>
+      <div class="ops-modal-body">
+        <form onsubmit="BalsonsOpsApp.submitRaiseHold(event)">
+          <div style="display: flex; gap: 12px;">
+            <div class="form-group" style="flex:1;">
+              <label>Workspace</label>
+              <select id="holdWsSelect" class="form-control" required>
+                <option value="LINE-AXLE">LINE-AXLE</option>
+                <option value="LINE-WHEEL">LINE-WHEEL</option>
+                <option value="AREA-MACHINE-SHOP-AXLE">AREA-MACHINE-SHOP-AXLE</option>
+              </select>
+            </div>
+            <div class="form-group" style="flex:1;">
+              <label>Workstream</label>
+              <select id="holdStreamSelect" class="form-control" required>
+                <option value="AXLE-PRESS-CELL">AXLE-PRESS-CELL</option>
+                <option value="WHEEL-FURNACE">WHEEL-FURNACE</option>
+                <option value="MS-FFG">MS-FFG</option>
+                <option value="MS-GER">MS-GER</option>
+                <option value="MS-PARI-GANTRY">MS-PARI-GANTRY</option>
+              </select>
+            </div>
+          </div>
+          <div style="display: flex; gap: 12px;">
+            <div class="form-group" style="flex:1;">
+              <label>Asset ID</label>
+              <input type="text" id="holdAssetInput" class="form-control" placeholder="e.g. AST-AXLE-SCH-01" required>
+            </div>
+            <div class="form-group" style="flex:1;">
+              <label>Hold Category</label>
+              <select id="holdCategorySelect" class="form-control" required>
+                <option value="CIVIL_TOLERANCE">CIVIL_TOLERANCE (Pocket hole / Pad variation)</option>
+                <option value="CIVIL_CURE">CIVIL_CURE (Concrete cube test pending)</option>
+                <option value="PLANT_LOGISTICS">PLANT_LOGISTICS (Internal transit blocked)</option>
+                <option value="OEM_DOCUMENTATION">OEM_DOCUMENTATION (Packing slip / drawing missing)</option>
+                <option value="SAFETY_CLEARANCE">SAFETY_CLEARANCE (High-risk permit hold)</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Hold Description & Site Observations</label>
+            <input type="text" id="holdDescInput" class="form-control" placeholder="e.g. Pocket hole depth on axis C3 shallower than Schuler drawing" required>
+          </div>
+          <div class="form-group">
+            <label>Identified Root Cause</label>
+            <input type="text" id="holdCauseInput" class="form-control" placeholder="e.g. Civil casting variation during second pour" required>
+          </div>
+          <div style="display: flex; gap: 12px;">
+            <div class="form-group" style="flex:1;">
+              <label>Responsible External Party</label>
+              <input type="text" id="holdPartyInput" class="form-control" value="JTRWF Civil / Client" required>
+            </div>
+            <div class="form-group" style="flex:1;">
+              <label>Impacted SOW Clause</label>
+              <input type="text" id="holdClauseInput" class="form-control" value="SOW-MECH-05.1 Clause 3" required>
+            </div>
+          </div>
+          <div style="display: flex; gap: 12px;">
+            <div class="form-group" style="flex:1;">
+              <label>Target Resolution Date</label>
+              <input type="date" id="holdTargetDate" class="form-control" value="2026-11-25" required>
+            </div>
+            <div class="form-group" style="flex:1;">
+              <label>Proposed Resolution Action</label>
+              <input type="text" id="holdActionInput" class="form-control" value="Core drilling of 45mm requested" required>
+            </div>
+          </div>
+          <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+            <button type="button" class="beds-btn beds-btn-secondary" onclick="BalsonsOpsApp.closeRaiseHoldModal()">Cancel</button>
+            <button type="submit" class="beds-btn beds-btn-danger" style="background:#dc2626; border-color:#dc2626;">⚠️ Log & Enforce Hold</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 5: DUAL SYNC MANAGER -->
+  <div id="modalSyncDb" class="ops-modal-overlay">
+    <div class="ops-modal-card" style="max-width: 580px;">
+      <div class="ops-modal-header">
+        <h4>🔄 Operations Ecosystem Dual-Sync Engine</h4>
+        <button class="ops-modal-close" onclick="BalsonsOpsApp.closeSyncModal()">✕</button>
+      </div>
+      <div class="ops-modal-body">
+        <div style="background:var(--super-bg); border:1px solid var(--super-border); padding:16px; border-radius:8px; margin-bottom:16px; font-size:12.5px;">
+          <div style="margin-bottom:8px;">
+            <strong>Target Google Sheet Database ID:</strong><br>
+            <code style="color:var(--beds-teal-primary); font-size:12px;">1GeqDDmBgdVm3ZUp4c9iB36__iLJ9wADQQRhEIwVxa-E</code>
+          </div>
+          <div style="margin-bottom:8px;">
+            <strong>Google Apps Script Clasp Gateway:</strong><br>
+            <code style="color:var(--beds-teal-primary); font-size:12px;">1an3LeD6Ich14qtWZ5GFgJMaa3dYQSboZRwFy9g_gf9zWicPDB9KpFNny</code>
+          </div>
+          <div>
+            <strong>Local Transactional Store:</strong><br>
+            <span>IndexedDB (<code>balsons_ops_db_v7_2</code>) • Local-First Architecture</span>
+          </div>
+        </div>
+
+        <p style="font-size:12px; color:var(--beds-text-secondary); line-height:1.5;">
+          The Operations Portal utilizes bi-directional synchronization. All local executions, shift handovers, and hold logs are reconciled with the official cloud database.
+        </p>
+
+        <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+          <a href="https://docs.google.com/spreadsheets/d/1GeqDDmBgdVm3ZUp4c9iB36__iLJ9wADQQRhEIwVxa-E/edit" target="_blank" class="beds-btn beds-btn-secondary" style="text-decoration:none;">
+            📊 Open Google Sheet ↗
+          </a>
+          <button type="button" id="btnForceSync" class="beds-btn beds-btn-primary" onclick="BalsonsOpsApp.triggerDualSync()">
+            ⚡ Force Bi-Directional Sync
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 6: PORTAL LOGIN / ROLE SWITCH -->
+  <div id="modal-login" class="ops-modal-overlay">
+    <div class="ops-modal-card" style="max-width: 440px;">
+      <div class="ops-modal-header">
+        <h4>🔐 Operations Portal Role Selection</h4>
+        <button class="ops-modal-close" onclick="BalsonsOpsApp.closeLoginModal()">✕</button>
+      </div>
+      <div class="ops-modal-body">
+        <form onsubmit="BalsonsOpsApp.handleRoleSwitch(event)">
+          <div class="form-group">
+            <label>Select Authorized Operations Account</label>
+            <select id="opsRoleSelect" class="form-control" style="font-weight:600;">
+              <option value="Operations Area Manager" data-name="Dilip Rout">Dilip Rout (Operations Area Manager)</option>
+              <option value="Area Manager (Machine Shop)" data-name="Sarat Mishra">Sarat Mishra (Machine Shop Area Manager)</option>
+              <option value="Lead Heavy Rigger" data-name="Manoj Das">Manoj Das (Lead Lifting Supervisor)</option>
+              <option value="Super Administrator" data-name="Prashant Muley">Prashant Muley (Super Administrator)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Access Credential</label>
+            <input type="password" class="form-control" value="••••••••••••" readonly style="letter-spacing:2px;">
+          </div>
+          <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+            <button type="button" class="beds-btn beds-btn-secondary" onclick="BalsonsOpsApp.closeLoginModal()">Cancel</button>
+            <button type="submit" class="beds-btn beds-btn-primary">Authorize & Switch</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. FLOATING TOAST NOTIFICATION CONTAINER -->
+  <div id="opsToastContainer" class="ops-toast-container"></div>
+
+  <!-- 7. ENTERPRISE FOOTER -->
   <footer class="portal-footer">
     <div><strong>BALSONS Heavy Lift & Shift</strong> • Operations Manager Portal</div>
-    <div style="font-style: italic; color: var(--super-cyan); font-weight: 600; margin-top: 4px;">
+    <div style="font-style: italic; color: rgb(223, 35, 14); font-weight: 700; margin-top: 4px;">
       “Difficult We Do Easily, Impossible Takes Little Time...!”
     </div>
     <div style="font-size: 11px; color: var(--beds-text-muted); margin-top: 4px;">
@@ -1439,6 +1635,7 @@
     </div>
   </footer>
 
+  <!-- Application Scripts -->
   <script src="assets/js/balsons-sam-auth.js"></script>
   <script src="assets/js/beds-superadmin.js"></script>
   <script src="assets/js/beds-portal-login.js"></script>
@@ -1451,6 +1648,8 @@
       const isDark = html.getAttribute('data-theme') === 'dark';
       html.setAttribute('data-theme', isDark ? 'light' : 'dark');
       localStorage.setItem('balsons_theme', isDark ? 'light' : 'dark');
+      const themeBtn = document.getElementById('themeBtn');
+      if (themeBtn) themeBtn.textContent = isDark ? '🌙 Dark' : '☀️ Light';
     }
 
     function switchTab(tabId, btn) {
@@ -1464,10 +1663,8 @@
     document.addEventListener('DOMContentLoaded', () => {
       const savedTheme = localStorage.getItem('balsons_theme') || 'light';
       document.documentElement.setAttribute('data-theme', savedTheme);
-
-      if (window.BalsonsSAMAuth) {
-        BalsonsSAMAuth.renderGlobalSuperAdminBar('operations', () => window.location.reload());
-      }
+      const themeBtn = document.getElementById('themeBtn');
+      if (themeBtn) themeBtn.textContent = savedTheme === 'dark' ? '☀️ Light' : '🌙 Dark';
     });
   </script>
 </body>
