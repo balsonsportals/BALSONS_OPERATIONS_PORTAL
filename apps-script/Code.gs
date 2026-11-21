@@ -72,7 +72,7 @@ function doGet(e) {
         break;
 
       case 'initDb':
-        responseData = OperationsService.initDatabase();
+        responseData = initOperationsDatabase(OPS_CONFIG.getSpreadsheetId());
         break;
 
       default:
