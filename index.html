@@ -2290,7 +2290,7 @@
     <div class="login-split-card" style="max-width: 940px;">
       <!-- Left: Cover image fitted to full side -->
       <div class="login-split-left">
-        <img class="login-cover" src="assets/images/login-gate.jpg" onerror="this.onerror=null;this.src='../assets/images/login-gate.jpg'" alt="Operations Manager">
+        <img class="login-cover" src="assets/images/login-operations.jpg" onerror="this.onerror=null;this.src='../assets/images/login-operations.jpg'" alt="Operations Manager">
         <div class="login-cover-overlay">
           <div class="login-cover-label">
             <h2>Operations &amp; Heavy Rigging</h2>
@@ -2395,12 +2395,8 @@
       if (themeBtn) themeBtn.textContent = savedTheme === 'dark' ? '☀️ Light' : '🌙 Dark';
     });
 
-    // Header Dropdowns Outside-Click Handler
+    // Header Dropdowns Outside-Click Handler (User Profile Pill)
     document.addEventListener('click', function(e) {
-      if (!e.target.closest('#portalSwitcherWrap')) {
-        var w = document.getElementById('portalSwitcherWrap');
-        if (w) w.classList.remove('open');
-      }
       if (!e.target.closest('#userPillWrap')) {
         var u = document.getElementById('userPillWrap');
         if (u) u.classList.remove('open');
