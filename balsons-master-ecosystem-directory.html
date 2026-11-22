@@ -169,6 +169,73 @@
       animation: pulseGlow 2s infinite;
     }
 
+    /* ═══ PORTAL SWITCHER & USER PILL DROPDOWNS (BEDS V1.0) ═══════ */
+    .portal-switcher-wrap, .user-pill-wrap { position: relative; display: inline-block; }
+    .portal-switcher-btn {
+      background: var(--super-bg);
+      border: 1px solid var(--super-border);
+      color: var(--beds-text-primary, #102d35);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+    .portal-switcher-btn:hover {
+      border-color: var(--super-cyan);
+      color: var(--super-cyan);
+    }
+    .portal-switcher-menu, .user-pill-menu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      min-width: 240px;
+      background: var(--beds-bg-panel, #ffffff);
+      border: 1px solid var(--super-border, #e2e8f0);
+      border-radius: 12px;
+      box-shadow: 0 12px 32px rgba(16,45,53,0.18);
+      z-index: 500;
+      padding: 6px;
+    }
+    .portal-switcher-wrap.open .portal-switcher-menu,
+    .user-pill-wrap.open .user-pill-menu { display: block; }
+    .portal-switcher-item, .user-pill-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--beds-text-primary, #102d35);
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .portal-switcher-item:hover, .user-pill-menu-item:hover { background: rgba(0,151,178,0.08); }
+    .portal-switcher-item.current { background: rgba(0,151,178,0.12); border-left: 3px solid #0097a7; }
+    .user-pill-menu-divider { height: 1px; background: var(--super-border, #e2e8f0); margin: 4px 0; }
+    .user-session-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 151, 167, 0.08);
+      border: 1px solid rgba(0, 151, 167, 0.25);
+      color: var(--super-cyan, #0097a7);
+      padding: 5px 12px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      user-select: none;
+    }
+
     /* 2. EXECUTIVE HUB BANNER */
     .hub-hero-ribbon {
       background: linear-gradient(135deg, #0b1924 0%, #102a35 50%, #004d5a 100%);
@@ -850,17 +917,52 @@
     </div>
     <div class="header-actions">
       <span class="badge-pill">
-        <span class="badge-live-dot"></span> 6 Portals Live
+        <span class="badge-live-dot"></span> 7 Portals Live
       </span>
+      <a href="mobile/directory.html" class="badge-pill" style="background: rgba(124, 58, 237, 0.12); border-color: #7c3aed; color: #7c3aed; font-weight: 800; text-decoration: none;" title="Open Mobile Directory & Credentials View">
+        📱 Mobile Directory
+      </a>
       <span class="badge-pill" title="Security & Authentication Model">
         🛡️ SAM-2026 Engine
       </span>
+
+      <!-- 🚀 Portals Dropdown -->
+      <div class="portal-switcher-wrap" id="portalSwitcherWrap">
+        <button class="portal-switcher-btn" type="button" onclick="document.getElementById('portalSwitcherWrap').classList.toggle('open')">
+          🚀 Portals <span style="font-size:10px;">▾</span>
+        </button>
+        <div class="portal-switcher-menu">
+          <a class="portal-switcher-item" href="index.html">🏢 Enterprise Launcher</a>
+          <a class="portal-switcher-item" href="BALSONS OPERATIONS MANAGER/index.html">🏗️ Operations Manager</a>
+          <a class="portal-switcher-item" href="BALSONS PURCHASE MANAGER/index.html">🛒 Purchase Manager</a>
+          <a class="portal-switcher-item" href="BALSONS STORE MANAGER/frontend/index.html">📦 Store Manager</a>
+          <a class="portal-switcher-item" href="BALSONS SAFETY MANAGER/frontend/index.html">🦺 Safety Manager</a>
+          <a class="portal-switcher-item" href="BALSONS GATE ENTRY MANAGER/frontend/index.html">🚪 Gate Entry Manager</a>
+          <a class="portal-switcher-item" href="BALSONS HR MANAGER/frontend/index.html">👥 HR &amp; Payroll Manager</a>
+          <div class="user-pill-menu-divider"></div>
+          <a class="portal-switcher-item current" href="balsons-master-ecosystem-directory.html">🌐 Master Directory</a>
+          <a class="portal-switcher-item" href="mobile/index.html">📱 Mobile Hub</a>
+        </div>
+      </div>
+
       <button class="badge-pill" id="themeBtn" onclick="toggleTheme()" style="cursor: pointer;" title="Toggle Light/Dark Theme">
         🌙 Dark
       </button>
-      <a href="index.html" class="badge-pill" style="background: rgba(0, 151, 167, 0.1); border-color: #0097a7; color: #0097a7; font-weight: 800;">
-        🚀 Central Launcher
-      </a>
+
+      <!-- 👤 User Pill Dropdown -->
+      <div class="user-pill-wrap" id="userPillWrap">
+        <div id="headerUserBadge" class="user-session-chip user-pill" onclick="document.getElementById('userPillWrap').classList.toggle('open')">
+          👑 <strong>Prashant Muley</strong> · Super Admin <span style="font-size:10px; margin-left:2px;">▾</span>
+        </div>
+        <div class="user-pill-menu">
+          <div class="user-pill-menu-item">👑 <span id="menuUserFullName">Prashant Muley (Super Admin)</span></div>
+          <div class="user-pill-menu-divider"></div>
+          <a class="user-pill-menu-item" href="index.html">🏢 Central Launcher</a>
+          <div class="user-pill-menu-item" onclick="switchMasterTab('credentials')">🔐 User Credentials Table</div>
+          <div class="user-pill-menu-divider"></div>
+          <a class="user-pill-menu-item" href="mobile/directory.html">📱 Mobile Directory</a>
+        </div>
+      </div>
     </div>
   </header>
 
@@ -892,22 +994,22 @@
     <div class="hub-stats-grid">
       <div class="hub-stat-card">
         <div class="stat-lbl"><span>🏛️</span> Portals Deployed</div>
-        <div class="stat-num">6 Live</div>
+        <div class="stat-num">7 Live</div>
         <div class="stat-sub">100% Responsive & Offline-First</div>
       </div>
       <div class="hub-stat-card">
         <div class="stat-lbl"><span>📊</span> Dedicated DB Sheets</div>
-        <div class="stat-num">5 Sheets</div>
+        <div class="stat-num">6 Sheets</div>
         <div class="stat-sub">Strict System-Boundary Segregation</div>
       </div>
       <div class="hub-stat-card">
         <div class="stat-lbl"><span>⚡</span> Apps Script Gateways</div>
-        <div class="stat-num">5 Clasp APIs</div>
+        <div class="stat-num">6 Clasp APIs</div>
         <div class="stat-sub">Bi-Directional JSON & REST Hooks</div>
       </div>
       <div class="hub-stat-card">
         <div class="stat-lbl"><span>🔐</span> Authorized Accounts</div>
-        <div class="stat-num">12 Verified</div>
+        <div class="stat-num">14 Verified</div>
         <div class="stat-sub">Super Admin & Role-Segregated Logins</div>
       </div>
     </div>
@@ -919,13 +1021,13 @@
     <!-- MASTER TAB NAVIGATION BAR (STRICT BEDS V1.0 STANDARDS) -->
     <div class="master-tab-bar">
       <button class="master-tab-btn active" id="btnTabPortals" onclick="switchMasterTab('portals')">
-        <span>🌐</span> Master Portals & Live Links <span class="tab-count-badge">6</span>
+        <span>🌐</span> Master Portals & Live Links <span class="tab-count-badge">7</span>
       </button>
       <button class="master-tab-btn" id="btnTabCredentials" onclick="switchMasterTab('credentials')">
-        <span>🔐</span> User IDs & Passwords <span class="tab-count-badge">12 Accounts</span>
+        <span>🔐</span> User IDs & Passwords <span class="tab-count-badge">14 Accounts</span>
       </button>
       <button class="master-tab-btn" id="btnTabArchitecture" onclick="switchMasterTab('architecture')">
-        <span>📊</span> Architecture & DB Matrix <span class="tab-count-badge">5 DBs</span>
+        <span>📊</span> Architecture & DB Matrix <span class="tab-count-badge">6 DBs</span>
       </button>
     </div>
 
@@ -941,8 +1043,9 @@
           <input type="text" id="portalSearchInput" placeholder="Search portals by name, sheet ID, clasp script ID, or capability..." oninput="filterPortals()">
         </div>
         <div class="filter-pills-group">
-          <button class="filter-pill-btn active" onclick="setFilter('ALL', this)">All Portals (6)</button>
+          <button class="filter-pill-btn active" onclick="setFilter('ALL', this)">All Portals (7)</button>
           <button class="filter-pill-btn" onclick="setFilter('OPERATIONS', this)">Operations & Erection</button>
+          <button class="filter-pill-btn" onclick="setFilter('PURCHASE', this)">Purchase & Procurement</button>
           <button class="filter-pill-btn" onclick="setFilter('STORE', this)">Store & Tackle Form 11</button>
           <button class="filter-pill-btn" onclick="setFilter('SAFETY', this)">Safety & PTW Risk</button>
           <button class="filter-pill-btn" onclick="setFilter('GATE', this)">Gate Entry & Muster</button>
@@ -1186,6 +1289,14 @@
             <div class="pm-link-row">
               <span class="pm-link-lbl"><span>🐙</span> Git Repository:</span>
               <a href="https://github.com/balsonsportals/BALSONS_HR_MANAGER.git" target="_blank" class="pm-open-link">BALSONS_HR_MANAGER.git ↗</a>
+7. PURCHASE MANAGER & COMMERCIAL PROCUREMENT (V6.0)
+   - Live URL: https://balsonsportals.github.io/BALSONS%20PURCHASE%20MANAGER/index.html
+   - Dedicated Sheet DB: 1ANnu4X2dR0EITq5RvkyfMv1Xfz30Ba26IKjc40uyj_c
+   - Sheet Link: https://docs.google.com/spreadsheets/d/1ANnu4X2dR0EITq5RvkyfMv1Xfz30Ba26IKjc40uyj_c/edit
+   - Apps Script Gateway: 1BPmt-vDa-pBy07quE1wq7FY6kq8VnQJPUNIx1GrlSBD5UO9v3FflrZZN
+   - Apps Script Link: https://script.google.com/d/1BPmt-vDa-pBy07quE1wq7FY6kq8VnQJPUNIx1GrlSBD5UO9v3FflrZZN/edit
+   - Git Repo: https://github.com/balsonsportals/BALSONS_PURCHASE_PORTAL.git
+
             </div>
           </div>
 
@@ -1250,6 +1361,58 @@
           </div>
         </div>
 
+        <!-- CARD 7: BALSONS PURCHASE MANAGER (PROCUREMENT SPINE) -->
+        <div class="portal-master-card" data-category="PURCHASE">
+          <div class="pm-header">
+            <div class="pm-icon-box" style="background: rgba(14, 165, 233, 0.12); color: #0ea5e9;">🛒</div>
+            <div class="pm-title-group">
+              <h3>Purchase Manager & Commercial Procurement</h3>
+              <p>Sourcing, RFQs, CS Landed Cost Matrix, PO Generation & ASN Tracking</p>
+            </div>
+            <span class="pm-version-badge tag-chip tag-cyan">V6.0 BASELINE</span>
+          </div>
+
+          <div class="pm-desc">
+            End-to-end commercial procurement engine governing PR approval workflows, RFQ supplier tendering, L1/L2/L3 landed cost comparison (freight, customs, GST, packaging), immutable Purchase Order issuance with formal PDF layout, Advance Shipping Notice (ASN) tracking, and dual-sync with Google Sheet.
+          </div>
+
+          <div class="pm-telemetry-box">
+            <div class="pm-link-row">
+              <span class="pm-link-lbl"><span>📊</span> Dedicated Sheet DB:</span>
+              <code class="pm-code-id" title="1ANnu4X2dR0EITq5RvkyfMv1Xfz30Ba26IKjc40uyj_c">1ANnu4X2...uyj_c</code>
+              <a href="https://docs.google.com/spreadsheets/d/1ANnu4X2dR0EITq5RvkyfMv1Xfz30Ba26IKjc40uyj_c/edit" target="_blank" class="pm-open-link">Open Sheet ↗</a>
+            </div>
+            <div class="pm-link-row">
+              <span class="pm-link-lbl"><span>⚡</span> Apps Script Gateway:</span>
+              <code class="pm-code-id" title="1BPmt-vDa-pBy07quE1wq7FY6kq8VnQJPUNIx1GrlSBD5UO9v3FflrZZN">1BPmt-vD...flrZZN</code>
+              <a href="https://script.google.com/d/1BPmt-vDa-pBy07quE1wq7FY6kq8VnQJPUNIx1GrlSBD5UO9v3FflrZZN/edit" target="_blank" class="pm-open-link">Open Script ↗</a>
+            </div>
+            <div class="pm-link-row">
+              <span class="pm-link-lbl"><span>🌐</span> Live Production URL:</span>
+              <a href="https://balsonsportals.github.io/BALSONS%20PURCHASE%20MANAGER/index.html" target="_blank" class="pm-open-link" style="font-weight:800;">balsonsportals.github.io/.../index.html ↗</a>
+            </div>
+            <div class="pm-link-row">
+              <span class="pm-link-lbl"><span>🏛️</span> Git Repository:</span>
+              <a href="https://github.com/balsonsportals/BALSONS_PURCHASE_PORTAL.git" target="_blank" class="pm-open-link">BALSONS_PURCHASE_PORTAL.git ↗</a>
+            </div>
+          </div>
+
+          <ul class="pm-features-list">
+            <li><span class="check-icon">✓</span> <strong>15 Relational Tables & Automated Provisioner:</strong> <code>indb.gs</code> & <code>PurchaseService.gs</code> establish automated schema initialization, headers, validations, and seed data.</li>
+            <li><span class="check-icon">✓</span> <strong>4-Tier Delegation of Authority (DoA):</strong> Strict tier approvals (Tier 1: ≤₹50k, Tier 2: ≤₹5L, Tier 3: ≤₹25L, Tier 4: >₹25L Super Admin sign-off).</li>
+            <li><span class="check-icon">✓</span> <strong>Comparative Statement (CS) Matrix:</strong> Normalized landed cost calculation (ex-works, freight, insurance, packaging, customs, GST) with automated L1/L2/L3 rank sorting.</li>
+            <li><span class="check-icon">✓</span> <strong>Traceability Spine & ASN Handshake:</strong> Seamless PR ➔ RFQ ➔ Quote ➔ CS ➔ PO ➔ ASN pipeline with Gate and Store Manager delivery alerts.</li>
+            <li><span class="check-icon">✓</span> <strong>Persistent Login & 360° Dossiers:</strong> Interactive dossiers for every PR, RFQ, PO, and Supplier; session persists across browser reloads.</li>
+          </ul>
+
+          <div class="pm-card-actions">
+            <a href="BALSONS%20PURCHASE%20MANAGER/index.html" class="btn-launch-primary" style="background:#0284c7;">Launch Purchase Portal ➔</a>
+            <a href="https://docs.google.com/spreadsheets/d/1ANnu4X2dR0EITq5RvkyfMv1Xfz30Ba26IKjc40uyj_c/edit" target="_blank" class="btn-launch-secondary">Database Sheet ↗</a>
+            <a href="https://script.google.com/d/1BPmt-vDa-pBy07quE1wq7FY6kq8VnQJPUNIx1GrlSBD5UO9v3FflrZZN/edit" target="_blank" class="btn-launch-secondary">Apps Script API ↗</a>
+          </div>
+        </div>
+
+
       </div>
     </div>
 
@@ -1285,9 +1448,10 @@
             <input type="text" id="credSearchInput" placeholder="Filter by User ID, Name, Role, Badge ID, or Scope..." oninput="filterCredentials()">
           </div>
           <div class="filter-pills-group">
-            <button class="filter-pill-btn active" onclick="setCredFilter('ALL', this)">All (12)</button>
+            <button class="filter-pill-btn active" onclick="setCredFilter('ALL', this)">All (14)</button>
             <button class="filter-pill-btn" onclick="setCredFilter('SUPER_ADMIN', this)">Super Admin (1)</button>
-            <button class="filter-pill-btn" onclick="setCredFilter('PORTAL_ADMIN', this)">Portal Admins (4)</button>
+            <button class="filter-pill-btn" onclick="setCredFilter('PORTAL_ADMIN', this)">Portal Admins (5)</button>
+            <button class="filter-pill-btn" onclick="setCredFilter('PURCHASE', this)">Procurement & Purchase (2)</button>
             <button class="filter-pill-btn" onclick="setCredFilter('OPERATIONS', this)">Operations & Rigging (4)</button>
             <button class="filter-pill-btn" onclick="setCredFilter('MANAGEMENT', this)">Director & Client (2)</button>
             <button class="filter-pill-btn" onclick="setCredFilter('CREW', this)">Crew (1)</button>
@@ -1354,7 +1518,7 @@
                   </div>
                 </td>
                 <td><code style="font-weight: 700; color: #0097a7;">2026</code></td>
-                <td><span class="tag-chip tag-cyan">ALL 6 PORTALS (FULL WRITE)</span></td>
+                <td><span class="tag-chip tag-cyan">ALL 7 PORTALS (FULL WRITE)</span></td>
                 <td><span class="tag-chip tag-green">● Active (Locked)</span></td>
                 <td>
                   <a href="index.html" class="btn-launch-primary" style="padding: 4px 10px; font-size: 11.5px;">Launch Hub ➔</a>
@@ -1819,7 +1983,88 @@
                 </td>
               </tr>
 
-            </tbody>
+                          <!-- 13. PURCHASE LEAD / COMMERCIAL HEAD (ROHAN SHARMA) -->
+              <tr data-cred-cat="PURCHASE PORTAL_ADMIN">
+                <td>
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <div class="user-avatar-badge" style="background: rgba(14, 165, 233, 0.15); color: #0ea5e9;">🛒</div>
+                    <div>
+                      <strong style="font-size: 13px;">Rohan Sharma</strong>
+                      <div style="font-size: 11px; color: var(--beds-text-muted);">Purchase Lead & Commercial Head</div>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <span class="pw-badge-box">
+                    <span id="uid-purch">admin.purch</span>
+                    <button class="btn-cred-copy" onclick="copyText('admin.purch', this)" title="Copy User ID">📋</button>
+                  </span>
+                  <div style="font-size: 10.5px; color: var(--beds-text-muted); margin-top: 2px;">purchase.lead@balsons.com</div>
+                </td>
+                <td><span class="tag-chip tag-cyan">Portal Administrator (Purchase)</span></td>
+                <td>
+                  <div>Commercial Procurement & Contracts</div>
+                  <small style="font-family: var(--beds-font-mono); color: var(--beds-text-muted);">BAL-PUR-001</small>
+                </td>
+                <td>
+                  <div class="pw-badge-box">
+                    <span class="pw-val-text masked" data-plain="Purch@Admin2026!" id="pw-purch">••••••••••••••</span>
+                    <button class="btn-pw-eye" onclick="toggleSinglePassword('pw-purch', this)" title="Show/Hide">👁️</button>
+                    <button class="btn-cred-copy" onclick="copyText('Purch@Admin2026!', this)" title="Copy Password">📋</button>
+                  </div>
+                </td>
+                <td><code style="font-weight: 700; color: #0ea5e9;">3001</code></td>
+                <td>
+                  <span class="tag-chip tag-cyan">Purchase Manager (Full Commercial Write)</span>
+                  <span class="tag-chip tag-purple">Launcher</span>
+                </td>
+                <td><span class="tag-chip tag-green">● Active</span></td>
+                <td>
+                  <a href="BALSONS%20PURCHASE%20MANAGER/index.html" class="btn-launch-primary" style="background:#0ea5e9; padding: 4px 10px; font-size: 11.5px;">Launch Purch ➔</a>
+                </td>
+              </tr>
+
+              <!-- 14. INDENTER & TECHNICAL REQUISITIONER (SURESH VERMA) -->
+              <tr data-cred-cat="PURCHASE OPERATIONS">
+                <td>
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <div class="user-avatar-badge" style="background: rgba(14, 165, 233, 0.15); color: #0ea5e9;">📝</div>
+                    <div>
+                      <strong style="font-size: 13px;">Suresh Verma</strong>
+                      <div style="font-size: 11px; color: var(--beds-text-muted);">Indenter & Erection Engineer</div>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <span class="pw-badge-box">
+                    <span id="uid-indenter">indenter.ops</span>
+                    <button class="btn-cred-copy" onclick="copyText('indenter.ops', this)" title="Copy User ID">📋</button>
+                  </span>
+                  <div style="font-size: 10.5px; color: var(--beds-text-muted); margin-top: 2px;">suresh.verma@balsons.com</div>
+                </td>
+                <td><span class="tag-chip tag-blue">Indenter / Site Engineer</span></td>
+                <td>
+                  <div>Mechanical Erection & Rigging</div>
+                  <small style="font-family: var(--beds-font-mono); color: var(--beds-text-muted);">BAL-PUR-002</small>
+                </td>
+                <td>
+                  <div class="pw-badge-box">
+                    <span class="pw-val-text masked" data-plain="Indent@Ops2026!" id="pw-indenter">••••••••••••••</span>
+                    <button class="btn-pw-eye" onclick="toggleSinglePassword('pw-indenter', this)" title="Show/Hide">👁️</button>
+                    <button class="btn-cred-copy" onclick="copyText('Indent@Ops2026!', this)" title="Copy Password">📋</button>
+                  </div>
+                </td>
+                <td><code style="font-weight: 700; color: #0ea5e9;">3002</code></td>
+                <td>
+                  <span class="tag-chip tag-cyan">Purchase (PR Drafting & Tech Specs)</span>
+                  <span class="tag-chip tag-blue">Operations</span>
+                </td>
+                <td><span class="tag-chip tag-green">● Active</span></td>
+                <td>
+                  <a href="BALSONS%20PURCHASE%20MANAGER/index.html" class="btn-launch-secondary" style="padding: 4px 10px; font-size: 11.5px;">Launch Purch ➔</a>
+                </td>
+              </tr>
+</tbody>
           </table>
         </div>
 
@@ -1836,7 +2081,7 @@
       <div class="matrix-panel">
         <div class="matrix-panel-header">
           <h3><span>📊</span> Master Ecosystem Data & API Gateway Architecture Matrix</h3>
-          <span class="tag-chip tag-green">All 5 Relational Databases Verified</span>
+          <span class="tag-chip tag-green">All 6 Relational Databases Verified</span>
         </div>
         <p style="font-size:12.5px; color:var(--beds-text-secondary); margin-bottom:16px;">
           Every portal is backed by a dedicated, purpose-built Google Spreadsheet database and Google Apps Script Clasp engine. Cross-portal data exchange occurs via authorized status sharing to preserve strict system boundaries:
@@ -2131,7 +2376,7 @@ Accepts: Canonical Password or Global Fallback: balsons@2026
    - Role: Super Administrator (Global Executive Access)
    - Password: Balsons@Super2026!
    - PIN: 2026
-   - Scope: ALL 6 PORTALS (Unrestricted Write)
+   - Scope: ALL 7 PORTALS (Unrestricted Write)
 
 2. PROJECT DIRECTOR
    - Full Name: Satish Chandra (BAL-DIR-001)
@@ -2220,10 +2465,26 @@ Accepts: Canonical Password or Global Fallback: balsons@2026
     - Password: Client@JTRWF2026!
     - PIN: 9001
     - Scope: Operations (360° Dossiers Read-Only), Launcher, Reports
+
+13. PURCHASE LEAD & COMMERCIAL HEAD
+    - Full Name: Rohan Sharma (BAL-PUR-001)
+    - User ID: admin.purch (purchase.lead@balsons.com)
+    - Role: Portal Administrator (Purchase & Procurement)
+    - Password: Purch@Admin2026!
+    - PIN: 3001
+    - Scope: Purchase Manager (Commercial Procurement & Contracts), Launcher
+
+14. INDENTER & SITE ERECTION ENGINEER
+    - Full Name: Suresh Verma (BAL-PUR-002)
+    - User ID: indenter.ops (suresh.verma@balsons.com)
+    - Role: Indenter / Site Engineer
+    - Password: Indent@Ops2026!
+    - PIN: 3002
+    - Scope: Purchase Requisitions (PR Drafting & Tech Specs), Operations
 `;
       if (navigator.clipboard) {
         navigator.clipboard.writeText(credData).then(() => {
-          alert('✓ All 12 User Credentials, Passwords, and PINs copied to clipboard!');
+          alert('✓ All 14 User Credentials, Passwords, and PINs copied to clipboard!');
         });
       } else {
         prompt('Copy all credentials:', credData);
@@ -2277,10 +2538,18 @@ Project: JTRWF Khordha, Odisha • Brand: "Difficult We Do Easily, Impossible Ta
    - Apps Script Gateway: 1_I-scIjBfFbJufFCppzT-fCp-cBC-5BKvk4RwS6UTVwno1KFu5MTxKs_
    - Apps Script Link: https://script.google.com/d/1_I-scIjBfFbJufFCppzT-fCp-cBC-5BKvk4RwS6UTVwno1KFu5MTxKs_/edit
    - Git Repo: https://github.com/balsonsportals/BALSONS_HR_MANAGER.git
+
+7. PURCHASE & PROCUREMENT MANAGER (V6.0)
+   - Live URL: https://balsonsportals.github.io/BALSONS%20PURCHASE%20MANAGER/index.html
+   - Dedicated Sheet DB: 1ANnu4X2dR0EITq5RvkyfMv1Xfz30Ba26IKjc40uyj_c
+   - Sheet Link: https://docs.google.com/spreadsheets/d/1ANnu4X2dR0EITq5RvkyfMv1Xfz30Ba26IKjc40uyj_c/edit
+   - Apps Script Gateway: 1BPmt-vDa-pBy07quE1wq7FY6kq8VnQJPUNIx1GrlSBD5UO9v3FflrZZN
+   - Apps Script Link: https://script.google.com/d/1BPmt-vDa-pBy07quE1wq7FY6kq8VnQJPUNIx1GrlSBD5UO9v3FflrZZN/edit
+   - Git Repo: https://github.com/balsonsportals/BALSONS_PURCHASE_PORTAL.git
 `;
       if (navigator.clipboard) {
         navigator.clipboard.writeText(summaryText).then(() => {
-          alert('✓ All portal live links, database sheet links, and script IDs copied to clipboard!');
+          alert('✓ All 7 portal live links, 6 database sheet links, and script IDs copied to clipboard!');
         });
       } else {
         alert('All links ready. See the on-screen directory or use Print A4.');
@@ -2294,6 +2563,34 @@ Project: JTRWF Khordha, Odisha • Brand: "Difficult We Do Easily, Impossible Ta
       document.documentElement.setAttribute('data-theme', savedTheme);
       const themeBtn = document.getElementById('themeBtn');
       if (themeBtn) themeBtn.textContent = savedTheme === 'dark' ? '☀️ Light' : '🌙 Dark';
+
+      // Restore User Session Display if available
+      try {
+        const raw = localStorage.getItem('balsons_global_auth_session');
+        if (raw) {
+          const sess = JSON.parse(raw);
+          const badge = document.getElementById('headerUserBadge');
+          const nameEl = document.getElementById('menuUserFullName');
+          if (badge && sess.name) {
+            badge.innerHTML = `👤 <strong>${sess.name.split(' ')[0]}</strong> · ${sess.role || 'Super Admin'} <span style="font-size:10px; margin-left:2px;">▾</span>`;
+          }
+          if (nameEl && sess.name) {
+            nameEl.textContent = `${sess.name} (${sess.role || 'User'})`;
+          }
+        }
+      } catch (e) {}
+
+      // Header Dropdowns Outside-Click Handler
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('#portalSwitcherWrap')) {
+          var w = document.getElementById('portalSwitcherWrap');
+          if (w) w.classList.remove('open');
+        }
+        if (!e.target.closest('#userPillWrap')) {
+          var u = document.getElementById('userPillWrap');
+          if (u) u.classList.remove('open');
+        }
+      });
 
       // Restore Active Tab
       const savedTab = localStorage.getItem('balsons_directory_active_tab');
